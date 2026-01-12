@@ -1,0 +1,134 @@
+#cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.card {
+  background: linear-gradient(135deg, #fdfdfd, #f1f1f1);
+  border-radius: 18px;
+  padding: 12px;
+  text-align: center;
+
+  border: 4px solid #ccc;
+
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.6);
+
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+.card h3 {
+  margin: 8px 0 4px;
+  text-transform: capitalize;
+}
+
+.card p {
+  font-size: 0.85em;
+  font-weight: bold;
+  opacity: 0.8;
+}
+
+.card img {
+  width: 96px;
+  height: 96px;
+  background: white;
+  border-radius: 10px;
+  margin-top: 6px;
+}
+
+.card.common {
+  border-color: #b0b0b0;
+  background: linear-gradient(135deg, #f7f7f7, #e0e0e0);
+}
+
+.card.rare {
+  border-color: #3b82f6;
+  background: linear-gradient(135deg, #eef4ff, #dbeafe);
+}
+
+.card.epic {
+  border-color: #a855f7;
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+}
+
+.card.legendary {
+  border-color: #facc15;
+  background: linear-gradient(135deg, #fff7cc, #fde68a);
+}
+
+.card.promo {
+  border-color: #ff69b4;
+  background: linear-gradient(135deg, #ffe6f0, #ffcce6);
+}
+.card.ultra {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, #fff7cc, #fde68a);
+}
+
+/* Powiększona karta TCG */
+.modal-content {
+  position: relative;
+  width: 320px;
+  height: 450px;
+  background-color: white;
+  border-radius: 12px;
+  border: 3px solid #333;
+  padding: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.modal-content img {
+  width: 260px; /* większy obrazek */
+  height: auto;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.modal-content h2 {
+  margin: 6px 0;
+  font-size: 1.3em;
+}
+
+.modal-content p {
+  margin: 4px 0;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Rarity w rogu */
+.modal-content::after {
+  content: attr(data-rarity);
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: gold;
+  color: black;
+  padding: 4px 8px;
+  font-weight: bold;
+  border-radius: 6px;
+  font-size: 0.9em;
+}
+
+/* Kolory rarity */
+.modal-content.common::after {
+  background-color: #a0a0a0;
+}
+.modal-content.rare::after {
+  background-color: #3b82f6;
+}
+.modal-content.epic::after {
+  background-color: #8b5cf6;
+}
+.modal-content.legendary::after {
+  background-color: #f59e0b;
+}

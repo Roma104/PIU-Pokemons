@@ -1,9 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pocemon</title>
+    <title>PokéCards</title>
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/auth.css" />
   </head>
-  <body></body>
+  <body class="auth-page">
+    <div class="auth-card">
+      <h1>PokéCards</h1>
+
+      <form id="login-form">
+        <input
+          type="text"
+          id="login-username"
+          placeholder="Nazwa użytkownika"
+          required
+        />
+        <input
+          type="password"
+          id="login-password"
+          placeholder="Hasło"
+          required
+        />
+        <button type="submit">Zaloguj się</button>
+      </form>
+
+      <p class="switch">
+        Nie masz konta?
+        <span id="show-register">Zarejestruj się</span>
+      </p>
+
+      <form id="register-form" class="hidden">
+        <input
+          type="text"
+          id="register-username"
+          placeholder="Nazwa użytkownika"
+          required
+        />
+        <input
+          type="password"
+          id="register-password"
+          placeholder="Hasło"
+          required
+        />
+        <button type="submit">Zarejestruj się</button>
+      </form>
+    </div>
+
+    <script type="module" src="js/index.js"></script>
+  </body>
 </html>
