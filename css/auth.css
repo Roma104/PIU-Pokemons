@@ -1,3 +1,14 @@
+body {
+  opacity: 1;
+  transition: opacity 1.2s ease-in-out; /* Czas trwania animacji ściemniania */
+}
+
+/* Klasa dodawana przez JS przy logowaniu */
+body.fade-out {
+  opacity: 0; /* Ekran robi się czarny/znika */
+  pointer-events: none; /* Blokuje klikanie podczas animacji */
+}
+
 .auth-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #ffcb05, #3b4cca);

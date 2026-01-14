@@ -2,6 +2,12 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: #f5f5f5;
+  opacity: 0; /* Startujemy z niewidoczną stroną */
+  transition: opacity 1.5s ease-in-out; /* Płynne wejście trwające 1.5s */
+}
+
+body.loaded {
+  opacity: 1;
 }
 
 header {
