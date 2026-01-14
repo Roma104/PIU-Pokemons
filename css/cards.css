@@ -1,134 +1,457 @@
+/* ---- Animacje ---- */
+@keyframes shine-move {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes rainbow-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes holo-sparkle {
+  0%,
+  100% {
+    opacity: 0.3;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.6;
+    filter: brightness(1.3);
+  }
+}
+
 #cards-container {
+  padding-top: 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  overflow: visible;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 16px;
   margin-top: 20px;
 }
 
+/* =========================================
+   KARTY NA LIŚCIE (GRID)
+   ========================================= */
 .card {
-  background: linear-gradient(135deg, #fdfdfd, #f1f1f1);
-  border-radius: 18px;
-  padding: 12px;
-  text-align: center;
-
-  border: 4px solid #ccc;
-
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15),
-    inset 0 0 0 2px rgba(255, 255, 255, 0.6);
-
-  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  aspect-ratio: 2.5 / 3.5;
+  border-radius: 14px;
+  overflow: hidden;
   cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #ffffff, #f3f4f6);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 .card:hover {
   transform: translateY(-6px) scale(1.05);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25),
-    inset 0 0 0 2px rgba(255, 255, 255, 0.8);
-}
-
-.card h3 {
-  margin: 8px 0 4px;
-  text-transform: capitalize;
-}
-
-.card p {
-  font-size: 0.85em;
-  font-weight: bold;
-  opacity: 0.8;
+  z-index: 10;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
 }
 
 .card img {
-  width: 96px;
-  height: 96px;
-  background: white;
-  border-radius: 10px;
-  margin-top: 6px;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 1;
 }
 
+.card h3 {
+  position: absolute;
+  bottom: 28px;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  padding: 2px 4px;
+  font-size: 0.9em;
+  text-align: center;
+  color: white;
+  background: rgba(0, 0, 0, 0.6);
+  text-transform: capitalize;
+  z-index: 5;
+  backdrop-filter: blur(2px);
+}
+
+.card p {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  margin: 0;
+  font-size: 0.75em;
+  font-weight: bold;
+  color: white;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 2px 6px;
+  border-radius: 4px;
+  z-index: 5;
+}
+
+/* Kolory ramek na liście */
 .card.common {
-  border-color: #b0b0b0;
-  background: linear-gradient(135deg, #f7f7f7, #e0e0e0);
+  border-color: #d4d4d8;
 }
-
 .card.rare {
-  border-color: #3b82f6;
-  background: linear-gradient(135deg, #eef4ff, #dbeafe);
+  border-color: #93c5fd;
 }
-
+.card.holo {
+  border-color: #5eead4;
+}
 .card.epic {
-  border-color: #a855f7;
-  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  border-color: #c084fc;
 }
-
 .card.legendary {
-  border-color: #facc15;
-  background: linear-gradient(135deg, #fff7cc, #fde68a);
-}
-
-.card.promo {
-  border-color: #ff69b4;
-  background: linear-gradient(135deg, #ffe6f0, #ffcce6);
+  border-color: #fde047;
 }
 .card.ultra {
-  border-color: #f59e0b;
-  background: linear-gradient(135deg, #fff7cc, #fde68a);
+  border-color: #fdba74;
+}
+.card.promo {
+  border-color: #f9a8d4;
+}
+.card.shiny {
+  border-color: #cbd5e1;
+}
+.card.rainbow {
+  border-color: #d8b4fe;
 }
 
-/* Powiększona karta TCG */
+/* =========================================
+   POWIĘKSZONA KARTA (MODAL)
+   ========================================= */
+
 .modal-content {
   position: relative;
-  width: 320px;
-  height: 450px;
-  background-color: white;
-  border-radius: 12px;
-  border: 3px solid #333;
-  padding: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-  text-align: center;
+  width: 450px;
+  max-width: 90vw;
+  aspect-ratio: 2.5 / 3.5;
+  max-height: 85vh;
+
+  box-sizing: border-box;
+  padding: 0; /* Zero paddingu wewnątrz */
+
+  border-radius: 20px;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+
+  /* BAZA: Białe tło i solidna ramka 4px */
+  background-color: #ffffff;
+  border: 4px solid #a1a1aa; /* Domyślna szara ramka, 4px */
+
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
 }
 
-.modal-content img {
-  width: 260px; /* większy obrazek */
-  height: auto;
-  margin: 10px 0;
-  border-radius: 8px;
+/* Obrazek w modalu */
+#modal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+
+  /* Zaokrąglenie rogów samego obrazka */
+  /* Skoro ramka ma radius 20px i grubość 4px, to wnętrze powinno mieć 16px */
+  border-radius: 15px;
+
+  position: relative;
+  z-index: 1;
+  background: transparent;
 }
 
-.modal-content h2 {
-  margin: 6px 0;
-  font-size: 1.3em;
+/* ---- KOLORY RAMEK (Border Override - 4px) ---- */
+
+.modal-content.common {
+  border-color: #a1a1aa;
+}
+.modal-content.rare {
+  border-color: #3b82f6;
+}
+.modal-content.holo {
+  border-color: #2dd4bf;
+  box-shadow: 0 0 30px rgba(45, 212, 191, 0.25);
+}
+.modal-content.epic {
+  border-color: #9333ea;
+}
+.modal-content.ultra {
+  border-color: #f97316;
+}
+.modal-content.promo {
+  border-color: #db2777;
+}
+.modal-content.shiny {
+  border-color: #94a3b8;
+  box-shadow: 0 0 25px rgba(148, 163, 184, 0.25);
 }
 
-.modal-content p {
-  margin: 4px 0;
-  font-weight: bold;
-  text-transform: uppercase;
+.modal-content.legendary {
+  border-color: #eab308;
+  box-shadow: 0 0 40px rgba(234, 179, 8, 0.4);
 }
 
-/* Rarity w rogu */
+/* Rainbow - NAPRAWA TŁA
+   Zamiast robić całe tło tęczowe, robimy "kanapkę":
+   1. Warstwa wierzchnia: Biały kolor, przycięty do "padding-box" (wnętrze).
+   2. Warstwa spodnia: Tęczowy gradient, przycięty do "border-box" (całość).
+   3. Ramka: 4px solid transparent (żeby odsłonić warstwę spodnią).
+*/
+.modal-content.rainbow {
+  border: 4px solid transparent; /* Rezerwujemy miejsce 4px */
+
+  background-image: linear-gradient(#fff, #fff),
+    linear-gradient(
+      135deg,
+      #ff0000,
+      #ff7300,
+      #fffb00,
+      #48ff00,
+      #00ffd5,
+      #002bff,
+      #7a00ff,
+      #ff00c8
+    );
+
+  background-origin: border-box;
+  background-clip: padding-box, border-box; /* Kluczowe: biały w środku, tęcza na ramce */
+
+  box-shadow: 0 0 35px rgba(255, 0, 200, 0.3);
+}
+
+/* ---- EFEKTY ŚWIETLNE (SHINE) ---- */
 .modal-content::after {
-  content: attr(data-rarity);
+  content: '';
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: gold;
-  color: black;
-  padding: 4px 8px;
-  font-weight: bold;
-  border-radius: 6px;
-  font-size: 0.9em;
+  inset: 0;
+  /* Dopasowujemy radius błysku do wnętrza ramki */
+  border-radius: 15px;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.5s;
 }
 
-/* Kolory rarity */
-.modal-content.common::after {
-  background-color: #a0a0a0;
+/* Rainbow Shine - BARDZO STONOWANY */
+.modal-content.rainbow::after {
+  opacity: 0.15; /* Zmniejszone, subtelne */
+  background: linear-gradient(
+    115deg,
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00c8,
+    #ff0000
+  );
+  background-size: 400% 400%;
+  animation: rainbow-move 4s ease infinite;
+  mix-blend-mode: overlay; /* Delikatne mieszanie */
 }
+
+/* Pozostałe efekty */
 .modal-content.rare::after {
-  background-color: #3b82f6;
+  opacity: 0.4;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(59, 130, 246, 0.3) 45%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(59, 130, 246, 0.3) 55%,
+    transparent 65%
+  );
+  background-size: 200% 100%;
+  animation: shine-move 4s infinite ease-in-out;
+  mix-blend-mode: multiply;
 }
+
+.modal-content.holo::after {
+  opacity: 0.3; /* Troszkę mniej intensywne */
+  background: repeating-linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 0, 0, 0.2) 15%,
+    rgba(255, 255, 0, 0.2) 20%,
+    rgba(0, 255, 0, 0.2) 25%,
+    rgba(0, 255, 255, 0.2) 30%,
+    rgba(0, 0, 255, 0.2) 35%,
+    rgba(255, 0, 255, 0.2) 40%,
+    transparent 50%
+  );
+  background-size: 250% 250%;
+  animation: shine-move 6s infinite linear;
+  mix-blend-mode: multiply;
+}
+
+.modal-content.ultra::after {
+  opacity: 0.5;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(249, 115, 22, 0.4) 45%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(249, 115, 22, 0.4) 55%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: shine-move 3s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  mix-blend-mode: overlay;
+}
+
+.modal-content.promo::after {
+  opacity: 0.4;
+  background: linear-gradient(
+    125deg,
+    transparent 30%,
+    rgba(236, 72, 153, 0.4) 45%,
+    rgba(255, 200, 255, 0.8) 50%,
+    rgba(236, 72, 153, 0.4) 55%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: shine-move 5s infinite linear;
+  mix-blend-mode: overlay;
+}
+
 .modal-content.epic::after {
-  background-color: #8b5cf6;
+  opacity: 0.4;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(147, 51, 234, 0.4) 45%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(147, 51, 234, 0.4) 55%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: shine-move 4s infinite linear;
+  mix-blend-mode: multiply;
 }
+
 .modal-content.legendary::after {
-  background-color: #f59e0b;
+  opacity: 0.8;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 215, 0, 0.3) 35%,
+    rgba(255, 255, 220, 0.9) 50%,
+    rgba(255, 215, 0, 0.3) 65%,
+    transparent 80%
+  );
+  background-size: 250% 100%;
+  animation: shine-move 3s infinite ease-in-out;
+  mix-blend-mode: overlay;
+}
+
+.modal-content.shiny::after {
+  opacity: 0.5;
+  background: linear-gradient(
+    125deg,
+    transparent 30%,
+    rgba(150, 150, 150, 0.8) 45%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(150, 150, 150, 0.8) 55%,
+    transparent 70%
+  );
+  background-size: 200% 200%;
+  animation: shine-move 2.5s infinite linear, holo-sparkle 2s infinite;
+  mix-blend-mode: hard-light;
+}
+
+/* ---- PLAKIETKI RARITY (Bez zmian) ---- */
+.modal-content .rarity {
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  padding: 6px 24px;
+  min-width: 120px;
+  text-align: center;
+  border-radius: 20px;
+  border: 3px solid #fff;
+  font-family: sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.85rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  background-color: #333;
+  color: white;
+}
+
+.modal-content .rarity.common {
+  background-color: #71717a;
+}
+.modal-content .rarity.rare {
+  background-color: #2563eb;
+}
+.modal-content .rarity.epic {
+  background-color: #7e22ce;
+  box-shadow: 0 0 10px rgba(126, 34, 206, 0.5);
+}
+.modal-content .rarity.ultra {
+  background-color: #ea580c;
+}
+.modal-content .rarity.promo {
+  background-color: #db2777;
+}
+.modal-content .rarity.shiny {
+  background: linear-gradient(135deg, #475569, #94a3b8);
+  border-color: #e2e8f0;
+}
+
+.modal-content .rarity.holo {
+  background: linear-gradient(
+    125deg,
+    #64748b,
+    #ef4444,
+    #eab308,
+    #22c55e,
+    #3b82f6,
+    #64748b
+  );
+  background-size: 300% 300%;
+  animation: rainbow-move 10s ease infinite;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.modal-content .rarity.legendary {
+  background: linear-gradient(to bottom, #ca8a04, #eab308);
+  border-color: #fef08a;
+  box-shadow: 0 0 20px rgba(234, 179, 8, 0.8);
+  color: #fff;
+}
+
+.modal-content .rarity.rainbow {
+  background: linear-gradient(
+    90deg,
+    #ef4444,
+    #eab308,
+    #22c55e,
+    #3b82f6,
+    #a855f7
+  );
+  background-size: 200%;
+  animation: rainbow-move 3s linear infinite;
+  border-color: #fff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
 }
