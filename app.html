@@ -9,6 +9,18 @@
     <link rel="stylesheet" href="css/animations.css" />
   </head>
   <body>
+    <aside id="user-sidebar">
+      <div class="sidebar-handle">◀</div>
+      <div class="sidebar-content">
+        <h3>Twój profil</h3>
+        <p><strong>Użytkownik:</strong> <span id="sb-username"></span></p>
+        <p><strong>E-mail:</strong> <span id="sb-email"></span></p>
+        <p><strong>Data urodzenia:</strong> <span id="sb-birthdate"></span></p>
+        <hr />
+        <p><strong>Kolekcja:</strong> <span id="sb-card-count">0</span> kart</p>
+        <button id="logout-btn">Wyloguj się</button>
+      </div>
+    </aside>
     <header id="header">
       <span id="user-name"></span>
       <span id="coins"></span>
@@ -25,9 +37,8 @@
     <div id="card-modal" class="modal hidden">
       <div class="modal-content">
         <span id="close-modal">&times;</span>
+        <div id="modal-rarity" class="rarity"></div>
         <img id="modal-image" />
-        <h2 id="modal-name"></h2>
-        <p id="modal-rarity"></p>
       </div>
     </div>
 

@@ -19,7 +19,9 @@ header {
 }
 
 main {
+  margin-left: 80px;
   padding: 20px;
+  transition: margin-left 0.3s;
 }
 
 button {
@@ -33,4 +35,43 @@ button {
 
 button:hover {
   background: #e6b800;
+}
+#user-sidebar {
+  position: fixed;
+  left: -250px; /* Całkowicie schowany */
+  top: 0;
+  width: 280px;
+  height: 100%;
+  background: #3b4cca;
+  color: white;
+  transition: left 0.3s ease-in-out;
+  z-index: 1000;
+  padding: 20px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Po najechaniu wysuń pasek */
+#user-sidebar:hover {
+  left: 0;
+}
+
+/* "Uchwyt" widoczny na krawędzi, gdy pasek jest schowany */
+.sidebar-handle {
+  position: absolute;
+  right: -50px;
+  top: 20px;
+  background: #3b4cca;
+  padding: 20px;
+  border-radius: 0 25px 25px 0;
+  cursor: pointer;
+}
+
+.sidebar-content button {
+  margin-top: 20px;
+  background: #dcbc31;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  cursor: pointer;
 }

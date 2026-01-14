@@ -1,61 +1,51 @@
 // js/index.js
+import { registerUser } from './auth/register.js';
+import { loginUser } from './auth/login.js';
 
 const loginForm = document.getElementById('login-form');
 const registerForm = document.getElementById('register-form');
-const toggle = document.getElementById('show-register');
+const toggleBtn = document.getElementById('show-register');
 
-// 1. Dźwięk sukcesu logowania
-const loginSuccessSound = new Audio('./assets/sounds/logged-in.mp3');
-loginSuccessSound.volume = 0.5; // Dostosuj głośność
-
-toggle.addEventListener('click', () => {
+// Przełączanie widoków
+toggleBtn.addEventListener('click', () => {
+    const isLoginVisible = !loginForm.classList.contains('hidden');
+    loginForm.classList.toggle('hidden');
     registerForm.classList.toggle('hidden');
+    toggleBtn.textContent = isLoginVisible
+        ? 'Masz już konto? Zaloguj się'
+        : 'Nie masz konta? Zarejestruj się';
 });
 
-function getUsers() {
-    return JSON.parse(localStorage.getItem('users')) || [];
-}
-
-function saveUsers(users) {
-    localStorage.setItem('users', JSON.stringify(users));
-}
-
-/* REGISTER */
+/* OBSŁUGA REJESTRACJI */
 registerForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const username = document.getElementById('register-username').value;
-    const password = document.getElementById('register-password').value;
+    const user = document.getElementById('register-username').value;
+    const email = document.getElementById('register-email').value;
+    const birthdate = document.getElementById('register-birthdate').value;
+    const pass = document.getElementById('register-password').value;
 
-    const users = getUsers();
-
-    if (users.find((u) => u.username === username)) {
-        alert('Użytkownik już istnieje');
-        return;
+    try {
+        registerUser(user, email, birthdate, pass);
+        alert('Konto utworzone!');
+        registerForm.reset();
+        toggleBtn.click();
+    } catch (err) {
+        alert(err.message);
     }
-
-    users.push({ username, password });
-    saveUsers(users);
-
-    alert('Konto utworzone! Możesz się zalogować.');
-    registerForm.reset();
 });
 
-/* LOGIN - TUTAJ ZMIANY */
+/* OBSŁUGA LOGOWANIA */
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    const user = document.getElementById('login-username').value;
+    const pass = document.getElementById('login-password').value;
 
-    const username = document.getElementById('login-username').value;
-    const password = document.getElementById('login-password').value;
-
-    const users = getUsers();
-    const user = users.find(
-        (u) => u.username === username && u.password === password
-    );
-
-    if (!user) {
-        alert('Błędny login lub hasło');
-        return;
+    try {
+        loginUser(user, pass);
+        window.location.href = 'app.html';
+    } catch (err) {
+        alert(err.message);
     }
 
     // Zapisanie sesji użytkownika
