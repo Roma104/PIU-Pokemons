@@ -17,16 +17,31 @@ export const store = {
     //zmiana teamu (ligtning, fire, water)
     changeTeam(newTeam) {
         if (this.state.user.coins < 1000) {
-            alert('Potrzebujesz 1000 coinów, aby zmienić drużynę!');
+            alert(`Brakuje Ci ${1000 - this.state.user.coins} monet!`);
             return false;
         }
 
-        this.state.user.coins -= 1000;
+        // 1. Pobierz aktualną listę wszystkich użytkowników
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+
+        // 2. Znajdź obecnego użytkownika i zaktualizuj go w "bazie"
+        const userIndex = users.findIndex(
+            (u) => u.username === this.state.user.username
+        );
+        if (userIndex !== -1) {
+            users[userIndex].team = newTeam;
+            users[userIndex].stats.coins -= 1000;
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        // 3. Zaktualizuj aktywną sesję
         this.state.user.team = newTeam;
-        this.notify();
+        this.state.user.coins -= 1000;
+
+        this.notify(); // To odświeży kolory na stronie dzięki subskrypcji w app.js
+        alert(`Witamy w drużynie ${newTeam}! Pobrano 1000 monet.`);
         return true;
     },
-
     subscribe(fn) {
         this.listeners.push(fn);
     },
