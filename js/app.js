@@ -1,31 +1,43 @@
-// js/app.js
-
 import './ui/header.js';
 import './ui/cards.js';
 import './ui/shop.js';
 import './ui/modal.js';
 import { store } from './store.js';
 
-// inicjalizacja stanu użytkownika
-store.init();
+const currentUser = sessionStorage.getItem('current_user');
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Obsługa Fade-In (Płynne wejście)
-    // Używamy małego opóźnienia (10ms), żeby przeglądarka na pewno zarejestrowała stan opacity: 0
-    setTimeout(() => {
-        document.body.classList.add('loaded');
-    }, 10);
+if (!currentUser) {
+    window.location.href = 'index.html';
+} else {
+    store.login(currentUser);
 
-    // 2. Dźwięk powitalny (opcjonalnie)
-    // Skoro użytkownik kliknął "Zaloguj" na poprzedniej stronie,
-    // przeglądarka powinna pozwolić na autoplay tutaj.
-    const welcomeSound = new Audio('./assets/sounds/logged-in.mp3'); // lub inny plik
-    welcomeSound.volume = 0.4;
+    const initApp = () => {
+        setTimeout(() => {
+            document.body.classList.add('loaded');
+        }, 10);
 
-    // Próba odtworzenia dźwięku
-    welcomeSound.play().catch(() => {
-        console.log('Autoplay zablokowany - dźwięk ruszy po kliknięciu.');
-    });
+        try {
+            const welcomeSound = new Audio('./assets/sounds/logged-in.mp3');
+            welcomeSound.volume = 0.4;
+            welcomeSound.play().catch(() => {});
+        } catch (e) {}
 
-    // ... Reszta Twojego kodu (importy, obsługa kart itp.) ...
-});
+        const bonusInfo = store.checkDailyBonus();
+
+        if (bonusInfo.awarded) {
+            setTimeout(() => {
+                alert(
+                    `Witaj ponownie ${currentUser}!\n` +
+                        `📅 Dzień streaka: ${bonusInfo.streak}\n` +
+                        `💰 Otrzymujesz: ${bonusInfo.bonus} monet!`
+                );
+            }, 500);
+        }
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+        initApp();
+    }
+}
