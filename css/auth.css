@@ -3,6 +3,47 @@ body {
   transition: opacity 1.2s ease-in-out; /* Czas trwania animacji ściemniania */
 }
 
+.team-options {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+}
+.team-card {
+  flex: 1;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  transition: 0.3s;
+  background: #f0f0f0;
+}
+.team-card input {
+  display: none;
+} /* Chowamy standardowe kółko radio */
+
+.team-card.lightning {
+  color: #856404;
+}
+.team-card.fire {
+  color: #721c24;
+}
+.team-card.water {
+  color: #0c5460;
+}
+
+/* Efekt zaznaczenia */
+.team-card input:checked + .card-content {
+  transform: scale(1.1);
+  font-weight: bold;
+}
+
+.team-card:has(input:checked) {
+  border-color: currentColor;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
 /* Klasa dodawana przez JS przy logowaniu */
 body.fade-out {
   opacity: 0; /* Ekran robi się czarny/znika */

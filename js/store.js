@@ -14,6 +14,18 @@ export const store = {
         this.state.user = JSON.parse(data);
         this.notify();
     },
+    //zmiana teamu (ligtning, fire, water)
+    changeTeam(newTeam) {
+        if (this.state.user.coins < 1000) {
+            alert('Potrzebujesz 1000 coinów, aby zmienić drużynę!');
+            return false;
+        }
+
+        this.state.user.coins -= 1000;
+        this.state.user.team = newTeam;
+        this.notify();
+        return true;
+    },
 
     subscribe(fn) {
         this.listeners.push(fn);

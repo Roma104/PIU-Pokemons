@@ -20,20 +20,38 @@ freePackBtn.addEventListener('click', async () => {
     cardLoading = true;
 
     const card = getCachedTCGCard();
+
+    // 1. Zawsze sprawdzaj, czy karta istnieje przed odczytem jej właściwości
     if (!card) {
-        alert('Brak kart w cache — odśwież stronę');
+        alert('Karty się jeszcze ładują, spróbuj za chwilę...');
         cardLoading = false;
         return;
     }
 
+    const userTeam = store.state.user.team;
+    let isUpgraded = false;
+
+    // 2. Bezpieczne sprawdzenie typu (małe litery)
+    const matchesTeam = card.types?.some(
+        (t) => t.toLowerCase() === userTeam.toLowerCase()
+    );
+
+    // 3. Logika ulepszenia
+    if (matchesTeam && Math.random() < 0.1) {
+        isUpgraded = true;
+    }
+
+    // 4. Dodanie karty do magazynu
     store.addCard({
-        id: Date.now(),
-        name: card.name,
+        id: Date.now(), // Unikalne ID dla każdego egzemplarza
+        name: isUpgraded ? `⭐ ${card.name} ⭐` : card.name,
         image: card.image,
-        // Używamy danych z obiektu karty (z api.js), zamiast losować
-        rarity: card.rarity,
-        rarityClass: card.rarityClass,
+        rarity: isUpgraded ? 'ULTRA RARE' : card.rarity,
+        rarityClass: isUpgraded ? 'shiny-boost' : card.rarityClass,
+        teamBonus: isUpgraded,
     });
+
+    if (isUpgraded) alert('MOC DRUŻYNY! Wylosowano rzadszą wersję!');
 
     cardLoading = false;
 });

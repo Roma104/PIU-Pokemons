@@ -9,6 +9,24 @@ import { store } from './store.js';
 // inicjalizacja stanu użytkownika
 store.init();
 
+//funkcja do kolorów dróżyny
+const applyTeamTheme = (state) => {
+    if (state.user && state.user.team) {
+        document.body.classList.remove(
+            'team-lightning',
+            'team-fire',
+            'team-water'
+        );
+        document.body.classList.add(`team-${state.user.team}`);
+    }
+};
+
+// WYWOŁANIE NATYCHMIASTOWE (aby kolory były od razu po odświeżeniu)
+applyTeamTheme(store.state);
+
+// Subskrypcja na przyszłe zmiany (np. po zmianie drużyny za 1000 coinów)
+store.subscribe(applyTeamTheme);
+
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Obsługa Fade-In (Płynne wejście)
     // Używamy małego opóźnienia (10ms), żeby przeglądarka na pewno zarejestrowała stan opacity: 0

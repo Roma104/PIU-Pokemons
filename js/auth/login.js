@@ -17,6 +17,7 @@ export function loginUser(username, password) {
             username: user.username,
             email: user.email,
             birthdate: user.birthdate,
+            team: user.team,
             coins: user.stats?.coins || 0,
             streak: user.stats?.streak || 0,
             cards: user.stats?.cards || [],

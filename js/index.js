@@ -23,10 +23,11 @@ registerForm.addEventListener('submit', (e) => {
     const user = document.getElementById('register-username').value;
     const email = document.getElementById('register-email').value;
     const birthdate = document.getElementById('register-birthdate').value;
+    const team = document.querySelector('input[name="team"]:checked').value;
     const pass = document.getElementById('register-password').value;
 
     try {
-        registerUser(user, email, birthdate, pass);
+        registerUser(user, email, birthdate, team, pass);
         alert('Konto utworzone!');
         registerForm.reset();
         toggleBtn.click();
