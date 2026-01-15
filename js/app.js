@@ -17,8 +17,8 @@ if (!currentUser) {
         }, 10);
 
         try {
-            const welcomeSound = new Audio('./assets/sounds/logged-in.mp3');
-            welcomeSound.volume = 0.4;
+            const welcomeSound = new Audio('./assets/sounds/intro-music.mp3');
+            welcomeSound.volume = 0.3;
             welcomeSound.play().catch(() => {});
         } catch (e) {}
 

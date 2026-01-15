@@ -47,7 +47,24 @@ export const store = {
 
     addCoins(amount) {
         if (!this.state.user) return;
+
         this.state.user.coins += amount;
+
+        try {
+            let soundFile;
+            if (amount > 0) {
+                soundFile = './assets/sounds/coin1.mp3';
+            } else if (amount < 0) {
+                soundFile = './assets/sounds/coin2.mp3';
+            }
+
+            if (soundFile) {
+                const audio = new Audio(soundFile);
+                audio.volume = 0.8;
+                audio.play().catch(() => {});
+            }
+        } catch (e) {}
+
         this.notify();
     },
 
@@ -93,7 +110,8 @@ export const store = {
             bonus = 50;
         }
 
-        this.state.user.coins += bonus;
+        this.addCoins(bonus);
+
         this.state.user.lastLogin = todayStr;
         this.state.user.streak = currentStreak;
 

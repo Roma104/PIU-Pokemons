@@ -89,12 +89,13 @@ function flipAllCards() {
     );
     if (unflipped.length === 0) return;
 
-    playSound('flip');
+    playSound('flipAll');
     let rareFound = false;
 
     unflipped.forEach((container, index) => {
         setTimeout(() => {
             container.classList.add('flipped');
+
             const rarity = container.dataset.rarityClass;
             if (
                 [
@@ -146,6 +147,7 @@ function showOpeningScene(cards) {
             if (cardContainer.classList.contains('flipped')) return;
 
             cardContainer.classList.add('flipped');
+
             playSound('flip');
 
             if (

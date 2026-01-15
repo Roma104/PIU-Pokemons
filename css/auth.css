@@ -1,12 +1,24 @@
-body {
-  opacity: 1;
-  transition: opacity 1.2s ease-in-out; /* Czas trwania animacji ściemniania */
+html {
+  background-color: #000;
+  height: 100%;
 }
 
-/* Klasa dodawana przez JS przy logowaniu */
+body {
+  opacity: 1;
+  transition: opacity 0.6s ease-in-out;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 body.fade-out {
-  opacity: 0; /* Ekran robi się czarny/znika */
-  pointer-events: none; /* Blokuje klikanie podczas animacji */
+  opacity: 0 !important;
+  pointer-events: none;
+  filter: blur(1px);
+}
+
+body.fade-out .auth-card {
+  transform: scale(0.95);
 }
 
 .auth-page {
@@ -15,6 +27,7 @@ body.fade-out {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-size: cover;
 }
 
 .auth-card {
@@ -24,6 +37,7 @@ body.fade-out {
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   text-align: center;
+  transition: transform 0.6s ease-in-out;
 }
 
 .auth-card h1 {
@@ -36,6 +50,7 @@ body.fade-out {
   margin-bottom: 12px;
   border-radius: 8px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
 .auth-card button {

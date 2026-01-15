@@ -1,5 +1,6 @@
 // js/ui/cards.js
 import { store } from '../store.js';
+import { playSound } from '../sound/sounds.js';
 
 const container = document.getElementById('cards-container');
 const modal = document.getElementById('card-modal');
@@ -27,6 +28,8 @@ store.subscribe((state) => {
                 store.removeCard(card.id);
                 return;
             }
+
+            playSound('cardClick');
 
             modalImage.src = card.image;
 
