@@ -25,10 +25,8 @@ closeBonusBtn.addEventListener('click', () => {
 if (!currentUser) {
     window.location.href = 'index.html';
 } else {
-    // 1. Logowanie użytkownika w store
     store.login(currentUser);
 
-    // 2. Obsługa motywu drużyny (Team Theme)
     const applyTeamTheme = (state) => {
         if (state.user && state.user.team) {
             document.body.classList.remove(
@@ -40,70 +38,70 @@ if (!currentUser) {
         }
     };
 
-    // Wywołanie natychmiastowe (aby kolory były od razu)
     applyTeamTheme(store.state);
 
-    // Subskrypcja na przyszłe zmiany
     store.subscribe(applyTeamTheme);
 
-    // 3. Główna funkcja inicjalizująca aplikację
     const initApp = () => {
-        // Efekt Fade-In
         setTimeout(() => {
             document.body.classList.add('loaded');
         }, 10);
 
-        // Dźwięk powitalny
         try {
             const welcomeSound = new Audio('./assets/sounds/intro-music.mp3');
             welcomeSound.volume = 0.3;
-            // Przeglądarki często blokują autoplay, więc łapiemy błąd cicho
             welcomeSound.play().catch(() => {});
         } catch (e) {}
 
-        // Sprawdzenie Daily Bonus
-        const bonusInfo = store.checkDailyBonus();
-        const bdayInfo = store.checkBirthdayBonus();
+        const userCards = store.state.user.cards || [];
+        const userCoins = store.state.user.coins;
 
-        // Tworzymy kolejkę bonusów
-        const pendingBonuses = [];
+        if (userCoins === 100 && userCards.length === 0) {
+            setTimeout(() => {
+                alert(
+                    `Witaj w PIU-Pokemons!\n\n` +
+                        `🎁 Na start otrzymujesz: 100 monet!\n` +
+                        `👉 Odbierz swój pierwszy DARMOWY PACK powyżej!`
+                );
+            }, 500);
+        } else {
+            const bonusInfo = store.checkDailyBonus();
+            const bdayInfo = store.checkBirthdayBonus();
 
-        if (bdayInfo.awarded) {
-            pendingBonuses.push({
-                title: 'Wszystkiego najlepszego!',
-                message: `Z okazji urodzin otrzymujesz specjalny prezent: ${bdayInfo.bonus} 🪙!`,
-                icon: '🎂',
-            });
+            const pendingBonuses = [];
+
+            if (bdayInfo.awarded) {
+                pendingBonuses.push({
+                    title: 'Wszystkiego najlepszego!',
+                    message: `Z okazji urodzin otrzymujesz specjalny prezent: ${bdayInfo.bonus} 🪙!`,
+                    icon: '🎂',
+                });
+            }
+
+            if (bonusInfo.awarded) {
+                pendingBonuses.push({
+                    title: 'Daily Bonus!',
+                    message: `Dzień streaka: ${bonusInfo.streak}🔥. Otrzymujesz ${bonusInfo.bonus} 🪙!`,
+                    icon: '🪙',
+                });
+            }
+
+            function processBonuses() {
+                if (pendingBonuses.length === 0) return;
+
+                const current = pendingBonuses.shift();
+                showBonusModal(current.title, current.message, current.icon);
+            }
+
+            closeBonusBtn.onclick = () => {
+                bonusOverlay.classList.add('hidden');
+                setTimeout(processBonuses, 300);
+            };
+
+            processBonuses();
         }
-
-        if (bonusInfo.awarded) {
-            pendingBonuses.push({
-                title: 'Daily Bonus!',
-                message: `Dzień streaka: ${bonusInfo.streak}. Otrzymujesz ${bonusInfo.bonus} 🪙!`,
-                icon: '🪙',
-            });
-        }
-
-        // Funkcja do pokazywania bonusów jeden po drugim
-        function processBonuses() {
-            if (pendingBonuses.length === 0) return;
-
-            const current = pendingBonuses.shift(); // Pobierz pierwszy bonus z kolejki
-            showBonusModal(current.title, current.message, current.icon);
-        }
-
-        // Nadpisujemy zdarzenie kliknięcia przycisku w modalu, żeby sprawdzał czy są kolejne bonusy
-        closeBonusBtn.onclick = () => {
-            bonusOverlay.classList.add('hidden');
-            // Małe opóźnienie przed kolejnym modalem dla lepszego efektu
-            setTimeout(processBonuses, 300);
-        };
-
-        // Uruchom proces
-        processBonuses();
     };
 
-    // 4. Uruchomienie aplikacji po załadowaniu DOM
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initApp);
     } else {

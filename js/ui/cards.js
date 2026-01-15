@@ -141,8 +141,13 @@ function renderCards() {
     const cardsToRender = getSortedCards(store.state.user.cards);
 
     if (cardsToRender.length === 0) {
-        container.innerHTML =
-            '<p style="text-align:center; width:100%; color: #334155; margin-top: 50px; font-size: 1.2rem; font-weight: bold;">Nie masz jeszcze żadnych kart. Odwiedź sklep!</p>';
+        container.innerHTML = `
+            <div class="empty-collection">
+                <h3>Pusto tu... 🍃</h3>
+                <p>Nie masz jeszcze żadnych kart w kolekcji.</p>
+                <p>Kliknij <strong>"Darmowy pack"</strong> u góry, aby zacząć!</p>
+            </div>
+        `;
         return;
     }
 

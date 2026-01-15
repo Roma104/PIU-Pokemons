@@ -1,3 +1,43 @@
+:root {
+  --primary-color: #333333;
+  --accent-color: #ffcb05;
+  --accent-hover: #e6b800;
+  --bg-color: #f5f5f5;
+  --text-on-primary: #ffffff;
+  --text-on-accent: #000000;
+  --main-gradient: linear-gradient(180deg, #f5f5f5 0%, #e0e0e0 100%);
+}
+
+body.team-lightning {
+  --primary-color: #f1c40f;
+  --accent-color: #2c3e50;
+  --accent-hover: #1a252f;
+  --text-on-primary: #000000;
+  --text-on-accent: #ffffff;
+  --bg-color: #fffdf0;
+  --main-gradient: linear-gradient(180deg, #fffdf0 0%, #fff6c0 100%);
+}
+
+body.team-fire {
+  --primary-color: #e74c3c;
+  --accent-color: #c0392b;
+  --accent-hover: #a93226;
+  --text-on-primary: #ffffff;
+  --text-on-accent: #ffffff;
+  --bg-color: #fff5f5;
+  --main-gradient: linear-gradient(180deg, #fff5f5 0%, #fadbd8 100%);
+}
+
+body.team-water {
+  --primary-color: #3498db;
+  --accent-color: #2980b9;
+  --accent-hover: #1f618d;
+  --text-on-primary: #ffffff;
+  --text-on-accent: #ffffff;
+  --bg-color: #f0f8ff;
+  --main-gradient: linear-gradient(180deg, #f0f8ff 0%, #d6eaf8 100%);
+}
+
 html,
 body {
   min-height: 100%;
@@ -5,45 +45,13 @@ body {
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  background-image: var(--main-gradient);
+  background-attachment: fixed;
   opacity: 0;
-  transition: opacity 1.5s ease-in-out;
+  transition: opacity 1s ease-in-out, background 0.5s ease;
   min-height: 100vh;
-}
-
-main {
-  margin-left: 80px;
-  padding: 20px;
-  transition: margin-left 0.3s;
-  min-height: calc(100vh - 60px);
-}
-
-body.team-lightning header,
-body.team-lightning #user-sidebar,
-body.team-lightning .sidebar-handle {
-  background: #f1c40f !important;
-  color: #000;
-}
-
-body.team-fire header,
-body.team-fire #user-sidebar,
-body.team-fire .sidebar-handle {
-  background: #e74c3c !important;
-  color: #fff;
-}
-
-body.team-water header,
-body.team-water #user-sidebar,
-body.team-water .sidebar-handle {
-  background: #3498db !important;
-  color: #fff;
-}
-
-.change-team-btn {
-  background: #939393;
-  font-size: 0.8em;
-  margin-top: 5px;
 }
 
 body.loaded {
@@ -51,66 +59,107 @@ body.loaded {
 }
 
 header {
-  background: #909090;
-  color: white;
-  padding: 12px 20px;
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+
+  padding: 15px 20px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: background 0.3s, color 0.3s;
 }
 
 main {
-  margin-left: 80px;
+  margin-left: 60px;
   padding: 20px;
-  transition: margin-left 0.3s;
+  transition: margin-left 0.3s ease-in-out;
+  min-height: calc(100vh - 60px);
 }
 
-button {
-  padding: 10px 16px;
-  border-radius: 8px;
-  border: none;
-  background: #ffcb05;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #e6b800;
-}
 #user-sidebar {
   position: fixed;
-  left: -250px;
+  left: -280px;
   top: 0;
   width: 280px;
   height: 100%;
-  background: #909090;
-  color: white;
-  transition: left 0.3s ease-in-out;
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
   padding: 20px;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
 }
 
-#user-sidebar:hover {
+#user-sidebar:hover,
+#user-sidebar.active {
   left: 0;
 }
 
 .sidebar-handle {
   position: absolute;
-  right: -50px;
-  top: 20px;
-  padding: 20px;
-  border-radius: 0 25px 25px 0;
+  right: -40px;
+  top: 80px;
+  width: 40px;
+  height: 50px;
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+
+  border-radius: 0 10px 10px 0;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 4px 0 5px rgba(0, 0, 0, 0.1);
   transition: background 0.3s;
 }
-.sidebar-content button {
+
+.sidebar-content h3 {
+  margin-top: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 10px;
+}
+
+#logout-btn {
   margin-top: 20px;
-  background: #dcbc31;
-  color: white;
-  border: none;
+  background: rgba(0, 0, 0, 0.2);
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.4);
   padding: 10px;
   width: 100%;
   cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+#logout-btn:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+#free-pack,
+#paid-pack {
+  background: var(--accent-color) !important;
+  color: var(--text-on-accent) !important;
+  border: none !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+#free-pack:not(:disabled):hover,
+#paid-pack:not(:disabled):hover {
+  background: var(--accent-hover) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+#free-pack:disabled,
+#paid-pack:disabled {
+  background: #ccc !important;
+  color: #666 !important;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none !important;
 }
 
 .bonus-modal {
@@ -119,12 +168,12 @@ button:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2000;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(4px);
 }
 
 .bonus-content {
@@ -132,46 +181,61 @@ button:hover {
   padding: 40px;
   border-radius: 20px;
   text-align: center;
-  max-width: 400px;
+  max-width: 440px;
   width: 90%;
-  transform: scale(0.8);
-  animation: popupAnim 0.4s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-#bonus-icon {
-  font-size: 60px;
-  margin-bottom: 20px;
-}
-
-.bonus-content h2 {
-  color: #3b4cca;
-  margin: 0;
-}
-.bonus-content p {
-  font-size: 1.2em;
-  margin: 20px 0;
-  color: #333;
-}
-
-#close-bonus-btn {
-  background: #ffcb05;
-  color: #3b4cca;
-  border: none;
-  padding: 12px 30px;
-  font-size: 1.1em;
-  font-weight: bold;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-#close-bonus-btn:hover {
-  transform: scale(1.1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  animation: popupAnim 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes popupAnim {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
   to {
     transform: scale(1);
     opacity: 1;
   }
+}
+
+#bonus-icon {
+  font-size: 60px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.bonus-content h2 {
+  color: #333;
+  margin: 0 0 10px 0;
+}
+.bonus-content p {
+  font-size: 1.1em;
+  margin: 10px 0 25px 0;
+  color: #555;
+}
+
+#close-bonus-btn {
+  background: var(--accent-color);
+  color: var(--text-on-accent);
+  border: none;
+  padding: 12px 40px;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.2s, filter 0.2s;
+}
+
+#close-bonus-btn:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.change-team-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: inherit;
+  font-size: 0.8em;
+  margin-top: 10px;
+  padding: 5px 10px;
 }

@@ -698,3 +698,25 @@
 .opening-card-container .modal-content.ultra .rarity {
   background-color: rgba(249, 115, 22, 0.95);
 }
+
+.empty-collection {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  margin-top: 20px;
+  border: 2px dashed #ccc;
+}
+
+.empty-collection h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.empty-collection p {
+  font-size: 1.1rem;
+  margin: 5px 0;
+}
