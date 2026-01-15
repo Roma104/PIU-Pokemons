@@ -12,22 +12,43 @@ export const store = {
         const key = `tcg_user_${username.trim().toLowerCase()}`;
         this.state.currentUserKey = key;
 
-        const data = localStorage.getItem(key);
+        // Pobieramy dane – upewnij się, że nazwa zmiennej zgadza się z tą w IF
+        const sessionData = localStorage.getItem(key);
 
-        if (data) {
-            this.state.user = JSON.parse(data);
+        if (sessionData) {
+            this.state.user = JSON.parse(sessionData);
         } else {
-            this.state.user = {
-                username: username,
-                coins: 100,
-                cards: [],
-                lastLogin: null,
-                lastFreePack: null,
-                streak: 0,
-            };
-            this.notify();
-        }
+            // 2. Jeśli nie ma sesji, szukamy w "bazie rejestracji"
+            const allUsers = JSON.parse(localStorage.getItem('users')) || [];
+            const foundUser = allUsers.find(
+                (u) =>
+                    u.username.toLowerCase() === username.trim().toLowerCase()
+            );
 
+            if (foundUser) {
+                // Przepisujemy dane z rejestracji do stanu aplikacji
+                this.state.user = {
+                    username: foundUser.username,
+                    email: foundUser.email,
+                    birthdate: foundUser.birthdate,
+                    coins: foundUser.stats?.coins || 100,
+                    cards: foundUser.stats?.cards || [],
+                    lastLogin: null,
+                    lastFreePack: null,
+                    streak: foundUser.stats?.streak || 0,
+                };
+            } else {
+                // Ostateczność: tworzymy nowego (awaryjnie)
+                this.state.user = {
+                    username: username,
+                    coins: 100,
+                    cards: [],
+                    lastLogin: null,
+                    lastFreePack: null,
+                    streak: 0,
+                };
+            }
+        }
         this.notify();
     },
     //zmiana teamu (ligtning, fire, water)
@@ -149,6 +170,30 @@ export const store = {
             bonus: bonus,
             streak: currentStreak,
         };
+    },
+    checkBirthdayBonus() {
+        if (!this.state.user || !this.state.user.birthdate)
+            return { awarded: false };
+
+        const now = new Date();
+        const todayMonthDay = `${now.getMonth() + 1}-${now.getDate()}`; // Format M-D
+
+        const bday = new Date(this.state.user.birthdate);
+        const bdayMonthDay = `${bday.getMonth() + 1}-${bday.getDate()}`;
+
+        // Sprawdzamy też, czy bonus nie został już odebrany w tym roku
+        const currentYear = now.getFullYear();
+        if (
+            todayMonthDay === bdayMonthDay &&
+            this.state.user.lastBirthdayBonusYear !== currentYear
+        ) {
+            this.state.user.coins += 100;
+            this.state.user.lastBirthdayBonusYear = currentYear; // Zapisujemy rok odebrania
+            this.notify();
+            return { awarded: true, bonus: 100 };
+        }
+
+        return { awarded: false };
     },
 
     checkFreePackAvailable() {

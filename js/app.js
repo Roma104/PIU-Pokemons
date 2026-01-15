@@ -5,6 +5,22 @@ import './ui/modal.js';
 import { store } from './store.js';
 
 const currentUser = sessionStorage.getItem('current_user');
+const bonusOverlay = document.getElementById('bonus-overlay');
+const bonusTitle = document.getElementById('bonus-title');
+const bonusMessage = document.getElementById('bonus-message');
+const bonusIcon = document.getElementById('bonus-icon');
+const closeBonusBtn = document.getElementById('close-bonus-btn');
+
+function showBonusModal(title, message, icon) {
+    bonusTitle.textContent = title;
+    bonusMessage.textContent = message;
+    bonusIcon.textContent = icon;
+    bonusOverlay.classList.remove('hidden');
+}
+
+closeBonusBtn.addEventListener('click', () => {
+    bonusOverlay.classList.add('hidden');
+});
 
 if (!currentUser) {
     window.location.href = 'index.html';
@@ -47,16 +63,44 @@ if (!currentUser) {
 
         // Sprawdzenie Daily Bonus
         const bonusInfo = store.checkDailyBonus();
+        const bdayInfo = store.checkBirthdayBonus();
+
+        // Tworzymy kolejkę bonusów
+        const pendingBonuses = [];
+
+        if (bdayInfo.awarded) {
+            pendingBonuses.push({
+                title: 'Wszystkiego najlepszego!',
+                message: `Z okazji urodzin otrzymujesz specjalny prezent: ${bdayInfo.bonus} 🪙!`,
+                icon: '🎂',
+            });
+        }
 
         if (bonusInfo.awarded) {
-            setTimeout(() => {
-                alert(
-                    `Witaj ponownie ${currentUser}!\n` +
-                        `📅 Dzień streaka: ${bonusInfo.streak}\n` +
-                        `💰 Otrzymujesz: ${bonusInfo.bonus} monet!`
-                );
-            }, 500);
+            pendingBonuses.push({
+                title: 'Daily Bonus!',
+                message: `Dzień streaka: ${bonusInfo.streak}. Otrzymujesz ${bonusInfo.bonus} 🪙!`,
+                icon: '🪙',
+            });
         }
+
+        // Funkcja do pokazywania bonusów jeden po drugim
+        function processBonuses() {
+            if (pendingBonuses.length === 0) return;
+
+            const current = pendingBonuses.shift(); // Pobierz pierwszy bonus z kolejki
+            showBonusModal(current.title, current.message, current.icon);
+        }
+
+        // Nadpisujemy zdarzenie kliknięcia przycisku w modalu, żeby sprawdzał czy są kolejne bonusy
+        closeBonusBtn.onclick = () => {
+            bonusOverlay.classList.add('hidden');
+            // Małe opóźnienie przed kolejnym modalem dla lepszego efektu
+            setTimeout(processBonuses, 300);
+        };
+
+        // Uruchom proces
+        processBonuses();
     };
 
     // 4. Uruchomienie aplikacji po załadowaniu DOM

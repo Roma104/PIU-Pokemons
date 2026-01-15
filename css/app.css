@@ -103,3 +103,66 @@ button:hover {
   width: 100%;
   cursor: pointer;
 }
+
+.bonus-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85); /* Ciemne tło */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(5px); /* Efekt rozmycia tła */
+}
+
+.bonus-content {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  transform: scale(0.8);
+  animation: popupAnim 0.4s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#bonus-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.bonus-content h2 {
+  color: #3b4cca;
+  margin: 0;
+}
+.bonus-content p {
+  font-size: 1.2em;
+  margin: 20px 0;
+  color: #333;
+}
+
+#close-bonus-btn {
+  background: #ffcb05;
+  color: #3b4cca;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+#close-bonus-btn:hover {
+  transform: scale(1.1);
+}
+
+@keyframes popupAnim {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
