@@ -11,3 +11,48 @@ body {
 body.loaded {
   opacity: 1;
 }
+
+/* filtry */
+.collection-controls {
+  max-width: 1300px;
+  margin: 0 auto 10px auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  transform: translateY(-10px);
+}
+
+.collection-controls label {
+  color: #334155;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.collection-controls select {
+  background-color: #1e293b;
+  color: #f1f5f9;
+  border: 2px solid #334155;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.collection-controls select:hover {
+  background-color: #334155;
+  border-color: #475569;
+  transform: translateY(-1px);
+}
+
+.collection-controls select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}

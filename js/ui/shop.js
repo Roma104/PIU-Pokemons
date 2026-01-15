@@ -12,6 +12,27 @@ let tempDrawnCards = [];
 let currentPackIsPaid = false;
 let isPackAnimationInProgress = false;
 
+// Funkcja pomocnicza do klas CSS (Musi być taka sama jak w cards.js dla spójności)
+function getCssClass(rarityText) {
+    if (!rarityText) return 'common';
+    const lower = rarityText.toLowerCase();
+
+    if (lower.includes('rainbow')) return 'rainbow';
+    if (lower.includes('gold') || lower.includes('secret')) return 'legendary';
+    if (lower.includes('special illustration')) return 'legendary';
+    if (lower.includes('illustration')) return 'ultra';
+    if (lower.includes('vmax') || lower.includes('vstar')) return 'ultra';
+    if (lower.includes('gx') || lower.includes(' ex')) return 'ultra';
+    if (lower.includes('shiny') || lower.includes('shining')) return 'shiny';
+    if (lower.includes('promo')) return 'promo';
+    if (lower.includes('double rare')) return 'holo';
+    if (lower.includes('holo')) return 'holo';
+    if (lower.includes('rare')) return 'rare';
+    if (lower.includes('uncommon')) return 'uncommon';
+
+    return 'common';
+}
+
 const overlayHTML = `
 <div id="pack-opening-overlay">
   <div id="pack-cards-area"></div>
@@ -76,7 +97,6 @@ function checkAllRevealed(cardsCount) {
 
     if (revealedCount === cardsCount) {
         flipAllBtn.classList.remove('visible');
-
         setTimeout(() => {
             buttonsContainer.classList.add('visible');
         }, 1000);
@@ -90,21 +110,25 @@ function flipAllCards() {
     if (unflipped.length === 0) return;
 
     playSound('flipAll');
+
     let rareFound = false;
 
     unflipped.forEach((container, index) => {
         setTimeout(() => {
             container.classList.add('flipped');
 
+            // Używamy klasy obliczonej dynamicznie
             const rarity = container.dataset.rarityClass;
+
+            // Sprawdzamy czy zagrać dźwięk 'rare'
             if (
                 [
                     'legendary',
                     'epic',
                     'rainbow',
                     'shiny',
-                    'rare-holo',
-                    'rare-ultra',
+                    'ultra',
+                    'holo',
                 ].includes(rarity)
             ) {
                 rareFound = true;
@@ -132,13 +156,16 @@ function showOpeningScene(cards) {
         const cardContainer = document.createElement('div');
         cardContainer.className = 'opening-card-container';
         cardContainer.style.animationDelay = `${index * 0.1}s`;
-        cardContainer.dataset.rarityClass = card.rarityClass;
+
+        // Obliczamy klasę CSS dla ramki i tła
+        const cssClass = getCssClass(card.rarity);
+        cardContainer.dataset.rarityClass = cssClass;
 
         cardContainer.innerHTML = `
             <div class="opening-card-face opening-card-back"></div>
-            <div class="opening-card-face opening-card-front modal-content ${card.rarityClass}">
+            <div class="opening-card-face opening-card-front modal-content ${cssClass}">
                 <img src="${card.image}">
-                <div class="rarity ${card.rarityClass}">${card.rarity}</div>
+                <div class="rarity ${cssClass}">${card.rarity}</div>
             </div>
         `;
 
@@ -147,7 +174,6 @@ function showOpeningScene(cards) {
             if (cardContainer.classList.contains('flipped')) return;
 
             cardContainer.classList.add('flipped');
-
             playSound('flip');
 
             if (
@@ -156,9 +182,9 @@ function showOpeningScene(cards) {
                     'epic',
                     'rainbow',
                     'shiny',
-                    'rare-holo',
-                    'rare-ultra',
-                ].includes(card.rarityClass)
+                    'ultra',
+                    'holo',
+                ].includes(cssClass)
             ) {
                 setTimeout(() => playSound('rare'), 200);
             }
@@ -191,23 +217,19 @@ flipAllBtn.addEventListener('click', (e) => {
 
 collectBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-
     if (!buttonsContainer.classList.contains('visible')) return;
 
     tempDrawnCards.forEach((card) => store.addCard(card));
 
     overlay.classList.remove('active');
     tempDrawnCards = [];
-
     isPackAnimationInProgress = false;
     updateButtonsState();
-
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 rerollBtn.addEventListener('click', async (e) => {
     e.stopPropagation();
-
     if (!buttonsContainer.classList.contains('visible')) return;
 
     if (store.state.user.coins < REROLL_COST) {
@@ -216,12 +238,10 @@ rerollBtn.addEventListener('click', async (e) => {
     }
 
     buttonsContainer.classList.remove('visible');
-
     store.addCoins(-REROLL_COST);
     playSound('shuffle');
 
     cardsArea.innerHTML = '';
-
     await new Promise((r) => setTimeout(r, 600));
 
     const newCards = generateCards(currentPackIsPaid);
@@ -233,16 +253,17 @@ function generateCards(isPaid) {
     for (let i = 0; i < 5; i++) {
         const card = getCachedTCGCard();
         if (!card) continue;
+
+        // Ważne: obliczamy klasę od nowa, żeby była poprawna w bazie
+        const correctClass = getCssClass(card.rarity);
+
         newCards.push({
             id: Date.now() + i,
             name: card.name,
             image: card.image,
             rarity: card.rarity,
-            rarityClass: card.rarityClass,
+            rarityClass: correctClass,
         });
-    }
-    if (newCards.length === 0) {
-        return [];
     }
     return newCards;
 }
@@ -263,6 +284,7 @@ async function openPack(isPaid) {
         }
     }
 
+    currentPackIsPaid = isPaid; // Zapamiętujemy typ paczki dla rerolla!
     isPackAnimationInProgress = true;
     updateButtonsState();
 
@@ -273,7 +295,6 @@ async function openPack(isPaid) {
     }
 
     playSound('packOpen');
-
     await new Promise((r) => setTimeout(r, 600));
 
     const newCards = generateCards(isPaid);

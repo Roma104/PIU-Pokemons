@@ -2,8 +2,6 @@ const sounds = {
     packOpen: new Audio('./assets/sounds/pack-open.mp3'),
     flip: new Audio('./assets/sounds/flip-card.mp3'),
     flipAll: new Audio('./assets/sounds/flip-cards.mp3'),
-    rare: new Audio('./assets/sounds/rare.mp3'),
-    shuffle: new Audio('./assets/sounds/shuffle.mp3'),
     coin1: new Audio('./assets/sounds/coin1.mp3'),
     coin2: new Audio('./assets/sounds/coin2.mp3'),
     cardClick: new Audio('./assets/sounds/card-click1.mp3'),

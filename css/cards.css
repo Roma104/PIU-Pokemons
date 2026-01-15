@@ -39,6 +39,43 @@
   }
 }
 
+.collection-controls {
+  float: right;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+#free-pack,
+#paid-pack {
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1px solid #d8d8d4;
+  background: linear-gradient(135deg, #ffffff, #f3f4f6);
+  color: #111827;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+#free-pack:not(:disabled):hover,
+#paid-pack:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  filter: brightness(1.05);
+}
+
+#free-pack:disabled,
+#paid-pack:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
 #cards-container {
   padding-top: 20px;
   display: grid;
