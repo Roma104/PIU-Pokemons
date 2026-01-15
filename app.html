@@ -30,7 +30,17 @@
     <main>
       <button id="free-pack">Darmowy pack</button>
       <button id="paid-pack">Pack (20 coinów)</button>
-
+      <div class="collection-controls">
+        <label for="sort-select">Sortuj według:</label>
+        <select id="sort-select">
+          <option value="date-new">Najnowsze (Data)</option>
+          <option value="date-old">Najstarsze (Data)</option>
+          <option value="rarity-high">Rzadkość (Najlepsze)</option>
+          <option value="rarity-low">Rzadkość (Zwykłe)</option>
+          <option value="name-az">Nazwa (A-Z)</option>
+          <option value="name-za">Nazwa (Z-A)</option>
+        </select>
+      </div>
       <section id="cards-container"></section>
     </main>
 

@@ -19,7 +19,6 @@ store.subscribe((state) => {
     coinsEl.textContent = `🪙 ${state.user.coins}`;
     streakEl.textContent = `🔥 ${state.user.streak}`;
 
-    // Aktualizacja sidebaru (jeśli elementy istnieją w DOM)
     if (sbUsername) sbUsername.textContent = state.user.username;
     if (sbEmail) sbEmail.textContent = state.user.email || 'Nie podano';
     if (sbBirthdate)
@@ -44,12 +43,9 @@ store.subscribe((state) => {
     }
 });
 
-// Obsługa przycisku wylogowania
 if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
-        // Czyścimy dane sesji
         localStorage.removeItem('user');
-        // Przekierowujemy do strony logowania
         window.location.href = 'index.html';
     });
 }

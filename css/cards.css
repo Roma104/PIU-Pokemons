@@ -1,4 +1,3 @@
-/* ---- Animacje ---- */
 @keyframes shine-move {
   0% {
     background-position: 200% 0;
@@ -7,7 +6,6 @@
     background-position: -200% 0;
   }
 }
-
 @keyframes rainbow-move {
   0% {
     background-position: 0% 50%;
@@ -19,7 +17,6 @@
     background-position: 0% 50%;
   }
 }
-
 @keyframes holo-sparkle {
   0%,
   100% {
@@ -31,6 +28,53 @@
     filter: brightness(1.3);
   }
 }
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.collection-controls {
+  float: right;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+#free-pack,
+#paid-pack {
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1px solid #d8d8d4;
+  background: linear-gradient(135deg, #ffffff, #f3f4f6);
+  color: #111827;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+#free-pack:not(:disabled):hover,
+#paid-pack:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  filter: brightness(1.05);
+}
+
+#free-pack:disabled,
+#paid-pack:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
 
 #cards-container {
   padding-top: 20px;
@@ -41,9 +85,6 @@
   margin-top: 20px;
 }
 
-/* =========================================
-   KARTY NA LIŚCIE (GRID)
-   ========================================= */
 .card {
   position: relative;
   aspect-ratio: 2.5 / 3.5;
@@ -55,13 +96,11 @@
   background: linear-gradient(135deg, #ffffff, #f3f4f6);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
-
 .card:hover {
   transform: translateY(-6px) scale(1.05);
   z-index: 10;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
 }
-
 .card img {
   position: absolute;
   inset: 0;
@@ -70,7 +109,6 @@
   object-fit: contain;
   z-index: 1;
 }
-
 .card h3 {
   position: absolute;
   bottom: 28px;
@@ -86,7 +124,6 @@
   z-index: 5;
   backdrop-filter: blur(2px);
 }
-
 .card p {
   position: absolute;
   bottom: 6px;
@@ -101,7 +138,6 @@
   z-index: 5;
 }
 
-/* Kolory ramek na liście */
 .card.common {
   border-color: #d4d4d8;
 }
@@ -130,50 +166,33 @@
   border-color: #d8b4fe;
 }
 
-/* =========================================
-   POWIĘKSZONA KARTA (MODAL)
-   ========================================= */
-
 .modal-content {
   position: relative;
   width: 450px;
   max-width: 90vw;
   aspect-ratio: 2.5 / 3.5;
   max-height: 85vh;
-
   box-sizing: border-box;
-  padding: 0; /* Zero paddingu wewnątrz */
-
+  padding: 0;
   border-radius: 20px;
   overflow: visible;
   display: flex;
   flex-direction: column;
-
-  /* BAZA: Białe tło i solidna ramka 4px */
   background-color: #ffffff;
-  border: 4px solid #a1a1aa; /* Domyślna szara ramka, 4px */
-
+  border: 4px solid #a1a1aa;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
   transition: transform 0.3s ease;
 }
-
-/* Obrazek w modalu */
 #modal-image {
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
-
-  /* Zaokrąglenie rogów samego obrazka */
-  /* Skoro ramka ma radius 20px i grubość 4px, to wnętrze powinno mieć 16px */
   border-radius: 15px;
-
   position: relative;
   z-index: 1;
   background: transparent;
 }
-
-/* ---- KOLORY RAMEK (Border Override - 4px) ---- */
 
 .modal-content.common {
   border-color: #a1a1aa;
@@ -198,21 +217,12 @@
   border-color: #94a3b8;
   box-shadow: 0 0 25px rgba(148, 163, 184, 0.25);
 }
-
 .modal-content.legendary {
   border-color: #eab308;
   box-shadow: 0 0 40px rgba(234, 179, 8, 0.4);
 }
-
-/* Rainbow - NAPRAWA TŁA
-   Zamiast robić całe tło tęczowe, robimy "kanapkę":
-   1. Warstwa wierzchnia: Biały kolor, przycięty do "padding-box" (wnętrze).
-   2. Warstwa spodnia: Tęczowy gradient, przycięty do "border-box" (całość).
-   3. Ramka: 4px solid transparent (żeby odsłonić warstwę spodnią).
-*/
 .modal-content.rainbow {
-  border: 4px solid transparent; /* Rezerwujemy miejsce 4px */
-
+  border: 4px solid transparent;
   background-image: linear-gradient(#fff, #fff),
     linear-gradient(
       135deg,
@@ -225,29 +235,23 @@
       #7a00ff,
       #ff00c8
     );
-
   background-origin: border-box;
-  background-clip: padding-box, border-box; /* Kluczowe: biały w środku, tęcza na ramce */
-
+  background-clip: padding-box, border-box;
   box-shadow: 0 0 35px rgba(255, 0, 200, 0.3);
 }
 
-/* ---- EFEKTY ŚWIETLNE (SHINE) ---- */
 .modal-content::after {
   content: '';
   position: absolute;
   inset: 0;
-  /* Dopasowujemy radius błysku do wnętrza ramki */
   border-radius: 15px;
   pointer-events: none;
   z-index: 10;
   opacity: 0;
   transition: opacity 0.5s;
 }
-
-/* Rainbow Shine - BARDZO STONOWANY */
 .modal-content.rainbow::after {
-  opacity: 0.15; /* Zmniejszone, subtelne */
+  opacity: 0.25;
   background: linear-gradient(
     115deg,
     #ff0000,
@@ -262,10 +266,8 @@
   );
   background-size: 400% 400%;
   animation: rainbow-move 4s ease infinite;
-  mix-blend-mode: overlay; /* Delikatne mieszanie */
+  mix-blend-mode: overlay;
 }
-
-/* Pozostałe efekty */
 .modal-content.rare::after {
   opacity: 0.4;
   background: linear-gradient(
@@ -280,9 +282,8 @@
   animation: shine-move 4s infinite ease-in-out;
   mix-blend-mode: multiply;
 }
-
 .modal-content.holo::after {
-  opacity: 0.3; /* Troszkę mniej intensywne */
+  opacity: 0.8;
   background: repeating-linear-gradient(
     115deg,
     transparent 0%,
@@ -298,7 +299,6 @@
   animation: shine-move 6s infinite linear;
   mix-blend-mode: multiply;
 }
-
 .modal-content.ultra::after {
   opacity: 0.5;
   background: linear-gradient(
@@ -313,7 +313,6 @@
   animation: shine-move 3s infinite cubic-bezier(0.4, 0, 0.2, 1);
   mix-blend-mode: overlay;
 }
-
 .modal-content.promo::after {
   opacity: 0.4;
   background: linear-gradient(
@@ -328,7 +327,6 @@
   animation: shine-move 5s infinite linear;
   mix-blend-mode: overlay;
 }
-
 .modal-content.epic::after {
   opacity: 0.4;
   background: linear-gradient(
@@ -343,7 +341,6 @@
   animation: shine-move 4s infinite linear;
   mix-blend-mode: multiply;
 }
-
 .modal-content.legendary::after {
   opacity: 0.8;
   background: linear-gradient(
@@ -358,7 +355,6 @@
   animation: shine-move 3s infinite ease-in-out;
   mix-blend-mode: overlay;
 }
-
 .modal-content.shiny::after {
   opacity: 0.5;
   background: linear-gradient(
@@ -374,7 +370,6 @@
   mix-blend-mode: hard-light;
 }
 
-/* ---- PLAKIETKI RARITY (Bez zmian) ---- */
 .modal-content .rarity {
   position: absolute;
   bottom: -15px;
@@ -395,7 +390,6 @@
   background-color: #333;
   color: white;
 }
-
 .modal-content .rarity.common {
   background-color: #71717a;
 }
@@ -416,7 +410,6 @@
   background: linear-gradient(135deg, #475569, #94a3b8);
   border-color: #e2e8f0;
 }
-
 .modal-content .rarity.holo {
   background: linear-gradient(
     125deg,
@@ -433,14 +426,12 @@
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
-
 .modal-content .rarity.legendary {
   background: linear-gradient(to bottom, #ca8a04, #eab308);
   border-color: #fef08a;
   box-shadow: 0 0 20px rgba(234, 179, 8, 0.8);
   color: #fff;
 }
-
 .modal-content .rarity.rainbow {
   background: linear-gradient(
     90deg,
@@ -454,4 +445,256 @@
   animation: rainbow-move 3s linear infinite;
   border-color: #fff;
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+#pack-opening-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, #1e293b 0%, #000000 100%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  perspective: 1000px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+#pack-opening-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+#pack-opening-overlay.locked {
+  pointer-events: none !important;
+  cursor: wait;
+}
+
+#pack-cards-area {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 1300px;
+  padding: 20px;
+  overflow-x: visible;
+}
+
+#pack-buttons-container {
+  display: none !important;
+  gap: 20px;
+  transform: translateY(0);
+}
+#pack-buttons-container.visible {
+  display: flex !important;
+  animation: pop-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.overlay-btn {
+  padding: 12px 30px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+.overlay-btn:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+#flip-all-btn {
+  background: linear-gradient(to right, #3b82f6, #2563eb);
+  position: absolute;
+  bottom: 120px;
+  opacity: 0;
+  pointer-events: none;
+}
+#flip-all-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#collect-btn {
+  background: linear-gradient(to right, #22c55e, #16a34a);
+}
+#reroll-btn {
+  background: linear-gradient(to right, #f59e0b, #d97706);
+}
+
+.opening-card-container {
+  width: 220px;
+  height: 330px;
+  flex: 0 0 220px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
+  animation: deal-card 0.6s ease-out backwards;
+}
+@keyframes deal-card {
+  from {
+    opacity: 0;
+    transform: translateY(150px) scale(0.8) rotateY(20deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateY(0);
+  }
+}
+.opening-card-container.flipped {
+  transform: rotateY(180deg);
+}
+
+.opening-card-container .modal-content {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  margin: 0 !important;
+  aspect-ratio: auto !important;
+  transform: rotateY(180deg) !important;
+  background-color: #18181b !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+  border-width: 4px !important;
+  padding: 0 !important;
+  display: block !important;
+}
+.opening-card-container .modal-content.rainbow {
+  background-image: linear-gradient(#18181b, #18181b),
+    linear-gradient(
+      135deg,
+      #ff0000,
+      #ff7300,
+      #fffb00,
+      #48ff00,
+      #00ffd5,
+      #002bff,
+      #7a00ff,
+      #ff00c8
+    ) !important;
+}
+
+.opening-card-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 14px;
+  overflow: hidden;
+  box-sizing: border-box !important;
+}
+.opening-card-back {
+  background: linear-gradient(135deg, #0f172a, #334155);
+  background-image: radial-gradient(
+      circle at 50% 50%,
+      rgba(255, 255, 255, 0.05) 0%,
+      transparent 50%
+    ),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.02) 0px,
+      transparent 2px,
+      transparent 15px
+    );
+  border: 4px solid #475569;
+  z-index: 2;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+.opening-card-container .modal-content img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 10px;
+  z-index: 1;
+}
+
+.opening-card-container .modal-content .rarity {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  transform: none !important;
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 8px 0;
+  font-size: 0.75rem;
+  text-align: center;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0 0 9px 9px;
+  box-shadow: none;
+  z-index: 10;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+.opening-card-container .modal-content.common .rarity {
+  background-color: rgba(113, 113, 122, 0.95);
+}
+.opening-card-container .modal-content.rare .rarity {
+  background-color: rgba(37, 99, 235, 0.95);
+}
+.opening-card-container .modal-content.epic .rarity {
+  background-color: rgba(147, 51, 234, 0.95);
+}
+.opening-card-container .modal-content.legendary .rarity {
+  background: linear-gradient(
+    to bottom,
+    rgba(202, 138, 4, 0.95),
+    rgba(234, 179, 8, 0.95)
+  );
+  border-top-color: rgba(254, 240, 138, 0.5);
+}
+.opening-card-container .modal-content.rainbow .rarity {
+  background: linear-gradient(
+    90deg,
+    rgba(239, 68, 68, 0.95),
+    rgba(234, 179, 8, 0.95),
+    rgba(34, 197, 94, 0.95),
+    rgba(59, 130, 246, 0.95),
+    rgba(168, 85, 247, 0.95)
+  );
+}
+.opening-card-container .modal-content.shiny .rarity {
+  background: linear-gradient(
+    135deg,
+    rgba(71, 85, 105, 0.95),
+    rgba(148, 163, 184, 0.95)
+  );
+}
+.opening-card-container .modal-content.holo .rarity {
+  background: linear-gradient(
+    125deg,
+    rgba(100, 116, 139, 0.95),
+    rgba(239, 68, 68, 0.95),
+    rgba(234, 179, 8, 0.95),
+    rgba(34, 197, 94, 0.95),
+    rgba(59, 130, 246, 0.95)
+  );
+}
+.opening-card-container .modal-content.promo .rarity {
+  background-color: rgba(219, 39, 119, 0.95);
+}
+.opening-card-container .modal-content.ultra .rarity {
+  background-color: rgba(249, 115, 22, 0.95);
 }

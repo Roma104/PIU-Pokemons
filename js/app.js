@@ -1,13 +1,20 @@
-// js/app.js
-
 import './ui/header.js';
 import './ui/cards.js';
 import './ui/shop.js';
 import './ui/modal.js';
 import { store } from './store.js';
 
-// inicjalizacja stanu użytkownika
-store.init();
+const currentUser = sessionStorage.getItem('current_user');
+
+if (!currentUser) {
+    window.location.href = 'index.html';
+} else {
+    store.login(currentUser);
+
+    const initApp = () => {
+        setTimeout(() => {
+            document.body.classList.add('loaded');
+        }, 10);
 
 //funkcja do kolorów dróżyny
 const applyTeamTheme = (state) => {
@@ -33,17 +40,28 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         document.body.classList.add('loaded');
     }, 10);
+        try {
+            const welcomeSound = new Audio('./assets/sounds/intro-music.mp3');
+            welcomeSound.volume = 0.3;
+            welcomeSound.play().catch(() => {});
+        } catch (e) {}
 
-    // 2. Dźwięk powitalny (opcjonalnie)
-    // Skoro użytkownik kliknął "Zaloguj" na poprzedniej stronie,
-    // przeglądarka powinna pozwolić na autoplay tutaj.
-    const welcomeSound = new Audio('./assets/sounds/logged-in.mp3'); // lub inny plik
-    welcomeSound.volume = 0.4;
+        const bonusInfo = store.checkDailyBonus();
 
-    // Próba odtworzenia dźwięku
-    welcomeSound.play().catch(() => {
-        console.log('Autoplay zablokowany - dźwięk ruszy po kliknięciu.');
-    });
+        if (bonusInfo.awarded) {
+            setTimeout(() => {
+                alert(
+                    `Witaj ponownie ${currentUser}!\n` +
+                        `📅 Dzień streaka: ${bonusInfo.streak}\n` +
+                        `💰 Otrzymujesz: ${bonusInfo.bonus} monet!`
+                );
+            }, 500);
+        }
+    };
 
-    // ... Reszta Twojego kodu (importy, obsługa kart itp.) ...
-});
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+        initApp();
+    }
+}

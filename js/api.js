@@ -1,6 +1,5 @@
 let cachedTCGCards = [];
 
-// Lista wszystkich setów, które chcesz wczytać
 const cardSets = [
     'bp.json',
     'bw1.json',
@@ -187,29 +186,24 @@ function mapRarityToClass(raw) {
 
     const r = raw.toLowerCase();
 
-    // Specjalne, najrzadsze typy (priorytet)
     if (r.includes('rainbow') || r.includes('hyper')) return 'rainbow';
     if (r.includes('shiny') || r.includes('shining')) return 'shiny';
-    if (r.includes('gold')) return 'legendary'; // Czasem gold cards
+    if (r.includes('gold')) return 'legendary';
 
-    // Standardowe wysokie rzadkości
     if (r.includes('secret')) return 'legendary';
     if (r.includes('legend')) return 'legendary';
 
-    // Promo i Ultra
     if (r.includes('promo')) return 'promo';
     if (r.includes('ultra')) return 'ultra';
-    if (r.includes('vmax') || r.includes('vstar')) return 'holo'; // Nowe karty VMAX często są traktowane jak holo/ultra
+    if (r.includes('vmax') || r.includes('vstar')) return 'holo';
 
-    // Holo i Rare
     if (r.includes('holo')) return 'holo';
-    if (r.includes('gx') || r.includes('ex') || r.includes('v')) return 'holo'; // Traktujemy je jako foliowane
+    if (r.includes('gx') || r.includes('ex') || r.includes('v')) return 'holo';
     if (r.includes('rare')) return 'rare';
 
     return 'common';
 }
 
-// Funkcja do wczytania wszystkich setów
 export async function preloadTCGCards() {
     try {
         let allCards = [];
@@ -217,19 +211,18 @@ export async function preloadTCGCards() {
         for (const set of cardSets) {
             const res = await fetch(`./js/cards/en/${set}`);
             const data = await res.json();
-            allCards.push(...data); // scalamy wszystkie karty
+            allCards.push(...data);
         }
 
         console.log('Ilość kart w JSON:', allCards.length);
 
-        // Tworzymy cache tylko z potrzebnymi polami
         cachedTCGCards = allCards
             .filter((card) => card.images && card.images.large)
             .map((card) => ({
                 name: card.name,
                 image: card.images.large,
-                rarity: card.rarity, // DO TEKSTU
-                rarityClass: mapRarityToClass(card.rarity), // DO CSS
+                rarity: card.rarity,
+                rarityClass: mapRarityToClass(card.rarity),
             }));
         console.log('Cache:', cachedTCGCards);
     } catch (err) {
@@ -237,7 +230,6 @@ export async function preloadTCGCards() {
     }
 }
 
-// Zwraca losową kartę z cache i usuwa ją
 export function getCachedTCGCard() {
     if (cachedTCGCards.length === 0) {
         console.warn('Cache pusty!');
