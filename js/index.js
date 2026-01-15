@@ -1,5 +1,10 @@
 import { registerUser } from './auth/register.js';
 import { loginUser } from './auth/login.js';
+import { applySeasonBackground } from './ui/season.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+    applySeasonBackground();
+});
 
 const loginForm = document.getElementById('login-form');
 const registerForm = document.getElementById('register-form');
