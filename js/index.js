@@ -5,6 +5,9 @@ const loginForm = document.getElementById('login-form');
 const registerForm = document.getElementById('register-form');
 const toggleBtn = document.getElementById('show-register');
 
+const clickSound = new Audio('./assets/sounds/logged-in.mp3');
+clickSound.volume = 0.9;
+
 toggleBtn.addEventListener('click', () => {
     const isLoginVisible = !loginForm.classList.contains('hidden');
     loginForm.classList.toggle('hidden');
@@ -42,7 +45,13 @@ loginForm.addEventListener('submit', (e) => {
 
         sessionStorage.setItem('current_user', user);
 
-        window.location.href = 'app.html';
+        clickSound.play().catch(() => {});
+
+        document.body.classList.add('fade-out');
+
+        setTimeout(() => {
+            window.location.href = 'app.html';
+        }, 600);
     } catch (err) {
         alert(err.message);
     }
