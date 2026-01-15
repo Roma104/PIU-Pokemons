@@ -95,6 +95,13 @@ function checkAllRevealed(cardsCount) {
         '.opening-card-container.flipped'
     ).length;
 
+    const card = getCachedTCGCard();
+
+    // 1. Zawsze sprawdzaj, czy karta istnieje przed odczytem jej właściwości
+    if (!card) {
+        alert('Karty się jeszcze ładują, spróbuj za chwilę...');
+        cardLoading = false;
+        return;
     if (revealedCount === cardsCount) {
         flipAllBtn.classList.remove('visible');
         setTimeout(() => {
@@ -111,6 +118,27 @@ function flipAllCards() {
 
     playSound('flipAll');
 
+    const userTeam = store.state.user.team;
+    let isUpgraded = false;
+
+    // 2. Bezpieczne sprawdzenie typu (małe litery)
+    const matchesTeam = card.types?.some(
+        (t) => t.toLowerCase() === userTeam.toLowerCase()
+    );
+
+    // 3. Logika ulepszenia
+    if (matchesTeam && Math.random() < 0.1) {
+        isUpgraded = true;
+    }
+
+    // 4. Dodanie karty do magazynu
+    store.addCard({
+        id: Date.now(), // Unikalne ID dla każdego egzemplarza
+        name: isUpgraded ? `⭐ ${card.name} ⭐` : card.name,
+        image: card.image,
+        rarity: isUpgraded ? 'ULTRA RARE' : card.rarity,
+        rarityClass: isUpgraded ? 'shiny-boost' : card.rarityClass,
+        teamBonus: isUpgraded,
     let rareFound = false;
 
     unflipped.forEach((container, index) => {
@@ -191,6 +219,9 @@ function showOpeningScene(cards) {
             checkAllRevealed(cards.length);
         };
 
+    if (isUpgraded) alert('MOC DRUŻYNY! Wylosowano rzadszą wersję!');
+
+    cardLoading = false;
         cardContainer.addEventListener('click', clickHandler);
         cardContainer.addEventListener('dblclick', (e) => {
             e.stopPropagation();

@@ -27,8 +27,7 @@
       </form>
 
       <p class="switch">
-        Nie masz konta?
-        <span id="show-register">Zarejestruj się</span>
+          <span id="show-register">Nie masz konta? Zarejestruj się</span>
       </p>
 
       <form id="register-form" class="hidden">
@@ -38,6 +37,25 @@
           placeholder="Nazwa użytkownika"
           required
         />
+        <div class="team-selection">
+          <p>Wybierz swoją drużynę:</p>
+          <div class="team-options">
+            <label class="team-card lightning">
+              <input type="radio" name="team" value="lightning" required />
+              <div class="card-content">⚡<span></br>Lightning</span></div>
+            </label>
+
+            <label class="team-card fire">
+              <input type="radio" name="team" value="fire" />
+              <div class="card-content">🔥<span></br>Fire</span></div>
+            </label>
+
+            <label class="team-card water">
+              <input type="radio" name="team" value="water" />
+              <div class="card-content">💧<span></br>Water</span></div>
+            </label>
+          </div>
+        </div>
         <input type="date" id="register-birthdate" required />
         <input
           type="email"

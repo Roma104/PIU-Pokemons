@@ -5,13 +5,41 @@ body {
   opacity: 0; /* Startujemy z niewidoczną stroną */
   transition: opacity 1.5s ease-in-out; /* Płynne wejście trwające 1.5s */
 }
+/* Style bazowe dla drużyn */
+body.team-lightning header,
+body.team-lightning #user-sidebar,
+body.team-lightning .sidebar-handle {
+  background: #f1c40f !important;
+  color: #000;
+}
+
+body.team-fire header,
+body.team-fire #user-sidebar,
+body.team-fire .sidebar-handle {
+  background: #e74c3c !important;
+  color: #fff;
+}
+
+body.team-water header,
+body.team-water #user-sidebar,
+body.team-water .sidebar-handle {
+  background: #3498db !important;
+  color: #fff;
+}
+
+/* Przycisk zmiany drużyny w sidebarze */
+.change-team-btn {
+  background: #939393;
+  font-size: 0.8em;
+  margin-top: 5px;
+}
 
 body.loaded {
   opacity: 1;
 }
 
 header {
-  background: #3b4cca;
+  background: #909090;
   color: white;
   padding: 12px 20px;
   display: flex;
@@ -42,7 +70,7 @@ button:hover {
   top: 0;
   width: 280px;
   height: 100%;
-  background: #3b4cca;
+  background: #909090;
   color: white;
   transition: left 0.3s ease-in-out;
   z-index: 1000;
@@ -60,12 +88,12 @@ button:hover {
   position: absolute;
   right: -50px;
   top: 20px;
-  background: #3b4cca;
   padding: 20px;
   border-radius: 0 25px 25px 0;
   cursor: pointer;
+  /* transition dla płynnej zmiany kolorów przy zmianie drużyny */
+  transition: background 0.3s;
 }
-
 .sidebar-content button {
   margin-top: 20px;
   background: #dcbc31;

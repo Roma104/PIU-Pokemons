@@ -1,4 +1,4 @@
-export function registerUser(username, email, birthdate, password) {
+export function registerUser(username, email, birthdate, team, password) {
     const users = JSON.parse(localStorage.getItem('users')) || [];
 
     // 1. Podstawowe sprawdzenia
@@ -17,7 +17,9 @@ export function registerUser(username, email, birthdate, password) {
     const passwordRegex =
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
     if (!passwordRegex.test(password)) {
-        throw new Error('Hasło za słabe!');
+        throw new Error(
+            'Hasło za słabe! Hasło musi zawierać conajmniej 8 znaków, co najmniej jedną literę, co najmniej jedną cyfrę i co najmniej jeden znak specjalny.'
+        );
     }
 
     // 4. Zapis danych
@@ -25,6 +27,7 @@ export function registerUser(username, email, birthdate, password) {
         username,
         email,
         birthdate,
+        team,
         password,
         stats: {
             coins: 100,
