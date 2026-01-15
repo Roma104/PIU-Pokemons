@@ -23,6 +23,7 @@
       </div>
     </aside>
     <header id="header">
+      <span id="user-name"></span>
       <span id="coins"></span>
       <span id="streak"></span>
     </header>
@@ -41,6 +42,7 @@
           <option value="name-za">Nazwa (Z-A)</option>
         </select>
       </div>
+
       <section id="cards-container"></section>
     </main>
 
@@ -53,5 +55,14 @@
     </div>
 
     <script type="module" src="js/app.js"></script>
+
+    <div id="bonus-overlay" class="bonus-modal hidden">
+      <div class="bonus-content">
+        <div id="bonus-icon">🎁</div>
+        <h2 id="bonus-title">Bonus!</h2>
+        <p id="bonus-message"></p>
+        <button id="close-bonus-btn">Odbierz</button>
+      </div>
+    </div>
   </body>
 </html>

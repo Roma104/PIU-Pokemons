@@ -95,13 +95,6 @@ function checkAllRevealed(cardsCount) {
         '.opening-card-container.flipped'
     ).length;
 
-    const card = getCachedTCGCard();
-
-    // 1. Zawsze sprawdzaj, czy karta istnieje przed odczytem jej właściwości
-    if (!card) {
-        alert('Karty się jeszcze ładują, spróbuj za chwilę...');
-        cardLoading = false;
-        return;
     if (revealedCount === cardsCount) {
         flipAllBtn.classList.remove('visible');
         setTimeout(() => {
@@ -118,27 +111,6 @@ function flipAllCards() {
 
     playSound('flipAll');
 
-    const userTeam = store.state.user.team;
-    let isUpgraded = false;
-
-    // 2. Bezpieczne sprawdzenie typu (małe litery)
-    const matchesTeam = card.types?.some(
-        (t) => t.toLowerCase() === userTeam.toLowerCase()
-    );
-
-    // 3. Logika ulepszenia
-    if (matchesTeam && Math.random() < 0.1) {
-        isUpgraded = true;
-    }
-
-    // 4. Dodanie karty do magazynu
-    store.addCard({
-        id: Date.now(), // Unikalne ID dla każdego egzemplarza
-        name: isUpgraded ? `⭐ ${card.name} ⭐` : card.name,
-        image: card.image,
-        rarity: isUpgraded ? 'ULTRA RARE' : card.rarity,
-        rarityClass: isUpgraded ? 'shiny-boost' : card.rarityClass,
-        teamBonus: isUpgraded,
     let rareFound = false;
 
     unflipped.forEach((container, index) => {
@@ -155,6 +127,7 @@ function flipAllCards() {
                     'epic',
                     'rainbow',
                     'shiny',
+                    'shiny-boost', // Dodano obsługę ulepszonej klasy
                     'ultra',
                     'holo',
                 ].includes(rarity)
@@ -185,8 +158,8 @@ function showOpeningScene(cards) {
         cardContainer.className = 'opening-card-container';
         cardContainer.style.animationDelay = `${index * 0.1}s`;
 
-        // Obliczamy klasę CSS dla ramki i tła
-        const cssClass = getCssClass(card.rarity);
+        // Używamy klasy z obiektu karty (może być nadpisana przez Team Bonus)
+        const cssClass = card.rarityClass;
         cardContainer.dataset.rarityClass = cssClass;
 
         cardContainer.innerHTML = `
@@ -210,6 +183,7 @@ function showOpeningScene(cards) {
                     'epic',
                     'rainbow',
                     'shiny',
+                    'shiny-boost',
                     'ultra',
                     'holo',
                 ].includes(cssClass)
@@ -219,9 +193,6 @@ function showOpeningScene(cards) {
             checkAllRevealed(cards.length);
         };
 
-    if (isUpgraded) alert('MOC DRUŻYNY! Wylosowano rzadszą wersję!');
-
-    cardLoading = false;
         cardContainer.addEventListener('click', clickHandler);
         cardContainer.addEventListener('dblclick', (e) => {
             e.stopPropagation();
@@ -250,6 +221,7 @@ collectBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     if (!buttonsContainer.classList.contains('visible')) return;
 
+    // Dodajemy wylosowane karty (które mogą być już ulepszone)
     tempDrawnCards.forEach((card) => store.addCard(card));
 
     overlay.classList.remove('active');
@@ -281,19 +253,41 @@ rerollBtn.addEventListener('click', async (e) => {
 
 function generateCards(isPaid) {
     const newCards = [];
+    const userTeam = store.state.user?.team; // Pobieramy drużynę gracza
+
     for (let i = 0; i < 5; i++) {
         const card = getCachedTCGCard();
         if (!card) continue;
 
-        // Ważne: obliczamy klasę od nowa, żeby była poprawna w bazie
-        const correctClass = getCssClass(card.rarity);
+        // 1. Obliczamy standardową klasę
+        let correctClass = getCssClass(card.rarity);
+        let finalName = card.name;
+        let finalRarity = card.rarity;
+        let isUpgraded = false;
+
+        // 2. Logika Team Bonus (zintegrowana z drugiego pliku)
+        // Sprawdzamy czy karta pasuje do drużyny gracza
+        if (userTeam && card.types) {
+            const matchesTeam = card.types.some(
+                (t) => t.toLowerCase() === userTeam.toLowerCase()
+            );
+
+            // 10% szans na ulepszenie jeśli pasuje do teamu
+            if (matchesTeam && Math.random() < 0.1) {
+                isUpgraded = true;
+                finalName = `⭐ ${card.name} ⭐`;
+                finalRarity = 'ULTRA RARE (Team Bonus)';
+                correctClass = 'shiny-boost'; // Specjalna klasa dla bonusu
+            }
+        }
 
         newCards.push({
             id: Date.now() + i,
-            name: card.name,
+            name: finalName,
             image: card.image,
-            rarity: card.rarity,
+            rarity: finalRarity,
             rarityClass: correctClass,
+            teamBonus: isUpgraded,
         });
     }
     return newCards;

@@ -9,43 +9,43 @@ const currentUser = sessionStorage.getItem('current_user');
 if (!currentUser) {
     window.location.href = 'index.html';
 } else {
+    // 1. Logowanie użytkownika w store
     store.login(currentUser);
 
+    // 2. Obsługa motywu drużyny (Team Theme)
+    const applyTeamTheme = (state) => {
+        if (state.user && state.user.team) {
+            document.body.classList.remove(
+                'team-lightning',
+                'team-fire',
+                'team-water'
+            );
+            document.body.classList.add(`team-${state.user.team}`);
+        }
+    };
+
+    // Wywołanie natychmiastowe (aby kolory były od razu)
+    applyTeamTheme(store.state);
+
+    // Subskrypcja na przyszłe zmiany
+    store.subscribe(applyTeamTheme);
+
+    // 3. Główna funkcja inicjalizująca aplikację
     const initApp = () => {
+        // Efekt Fade-In
         setTimeout(() => {
             document.body.classList.add('loaded');
         }, 10);
 
-//funkcja do kolorów dróżyny
-const applyTeamTheme = (state) => {
-    if (state.user && state.user.team) {
-        document.body.classList.remove(
-            'team-lightning',
-            'team-fire',
-            'team-water'
-        );
-        document.body.classList.add(`team-${state.user.team}`);
-    }
-};
-
-// WYWOŁANIE NATYCHMIASTOWE (aby kolory były od razu po odświeżeniu)
-applyTeamTheme(store.state);
-
-// Subskrypcja na przyszłe zmiany (np. po zmianie drużyny za 1000 coinów)
-store.subscribe(applyTeamTheme);
-
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Obsługa Fade-In (Płynne wejście)
-    // Używamy małego opóźnienia (10ms), żeby przeglądarka na pewno zarejestrowała stan opacity: 0
-    setTimeout(() => {
-        document.body.classList.add('loaded');
-    }, 10);
+        // Dźwięk powitalny
         try {
             const welcomeSound = new Audio('./assets/sounds/intro-music.mp3');
             welcomeSound.volume = 0.3;
+            // Przeglądarki często blokują autoplay, więc łapiemy błąd cicho
             welcomeSound.play().catch(() => {});
         } catch (e) {}
 
+        // Sprawdzenie Daily Bonus
         const bonusInfo = store.checkDailyBonus();
 
         if (bonusInfo.awarded) {
@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // 4. Uruchomienie aplikacji po załadowaniu DOM
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initApp);
     } else {
