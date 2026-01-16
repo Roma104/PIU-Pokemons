@@ -223,6 +223,7 @@ export async function preloadTCGCards() {
                 image: card.images.large,
                 rarity: card.rarity,
                 rarityClass: mapRarityToClass(card.rarity),
+                types: card.types || [],
             }));
         console.log('Cache:', cachedTCGCards);
     } catch (err) {

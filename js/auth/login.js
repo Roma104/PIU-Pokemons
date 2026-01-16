@@ -1,7 +1,7 @@
 export function loginUser(username, password) {
     const users = JSON.parse(localStorage.getItem('users')) || [];
 
-    // Szukamy pełnego obiektu użytkownika w "bazie"
+    // Szukamy pełnego obiektu
     const user = users.find(
         (u) => u.username === username && u.password === password
     );
@@ -10,7 +10,7 @@ export function loginUser(username, password) {
         throw new Error('Błędny login lub hasło!');
     }
 
-    // Zapisujemy do sesji (klucz 'user') wszystkie dane, które podał przy rejestracji
+    // Zapisujemy do sesji
     localStorage.setItem(
         'user',
         JSON.stringify({

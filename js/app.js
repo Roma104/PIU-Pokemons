@@ -103,8 +103,7 @@ if (!currentUser) {
 
                         typeModalTitle.textContent = 'Witaj w PokéCards!';
                         typeModalSubtitle.textContent =
-                            'Wybierz swój pierwszy ulubiony typ (Bonus +10%) za darmo!';
-
+                            'Wybierz swój ulubiony typ! Zwiększa szansę na ten typ 200-krotnie! (Pierwszy raz za darmo)';
                         const typeBtns =
                             typeModal.querySelectorAll('.type-item');
                         typeBtns.forEach((btn) => {
