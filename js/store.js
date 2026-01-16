@@ -31,6 +31,8 @@ export const store = {
                     username: foundUser.username,
                     email: foundUser.email,
                     birthdate: foundUser.birthdate,
+                    team: foundUser.team,
+                    favoriteType: 'Normal',
                     coins: foundUser.stats?.coins || 100,
                     cards: foundUser.stats?.cards || [],
                     lastLogin: null,
@@ -53,32 +55,54 @@ export const store = {
     },
     //zmiana teamu (ligtning, fire, water)
     changeTeam(newTeam) {
-        if (this.state.user.coins < 1000) {
-            alert(`Brakuje Ci ${1000 - this.state.user.coins} monet!`);
-            return false;
-        }
+        if (this.state.user.coins < 1000) return false;
 
-        // 1. Pobierz aktualną listę wszystkich użytkowników
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-
-        // 2. Znajdź obecnego użytkownika i zaktualizuj go w "bazie"
-        const userIndex = users.findIndex(
-            (u) => u.username === this.state.user.username
+        // 1. Aktualizacja bazy wszystkich użytkowników
+        const allUsers = JSON.parse(localStorage.getItem('users')) || [];
+        const userIdx = allUsers.findIndex(
+            (u) =>
+                u.username.toLowerCase() ===
+                this.state.user.username.toLowerCase()
         );
-        if (userIndex !== -1) {
-            users[userIndex].team = newTeam;
-            users[userIndex].stats.coins -= 1000;
-            localStorage.setItem('users', JSON.stringify(users));
+
+        if (userIdx !== -1) {
+            allUsers[userIdx].team = newTeam;
+            allUsers[userIdx].stats.coins -= 1000;
+            localStorage.setItem('users', JSON.stringify(allUsers));
         }
 
-        // 3. Zaktualizuj aktywną sesję
+        // 2. Aktualizacja bieżącej sesji
         this.state.user.team = newTeam;
         this.state.user.coins -= 1000;
 
-        this.notify(); // To odświeży kolory na stronie dzięki subskrypcji w app.js
-        alert(`Witamy w drużynie ${newTeam}! Pobrano 1000 monet.`);
+        // 3. Powiadomienie systemowe (zmieni kolory i UI)
+        this.notify();
         return true;
     },
+
+    changeFavoriteType(newType) {
+        if (this.state.user.coins < 1000) return false;
+
+        const allUsers = JSON.parse(localStorage.getItem('users')) || [];
+        const userIdx = allUsers.findIndex(
+            (u) =>
+                u.username.toLowerCase() ===
+                this.state.user.username.toLowerCase()
+        );
+
+        if (userIdx !== -1) {
+            allUsers[userIdx].favoriteType = newType;
+            allUsers[userIdx].stats.coins -= 1000;
+            localStorage.setItem('users', JSON.stringify(allUsers));
+        }
+
+        this.state.user.favoriteType = newType;
+        this.state.user.coins -= 1000;
+
+        this.notify();
+        return true;
+    },
+
     subscribe(fn) {
         this.listeners.push(fn);
     },

@@ -16,8 +16,80 @@
         <p><strong>Użytkownik:</strong> <span id="sb-username"></span></p>
         <p><strong>E-mail:</strong> <span id="sb-email"></span></p>
         <p><strong>Data urodzenia:</strong> <span id="sb-birthdate"></span></p>
-        <p><strong>Drużyna:</strong> <span id="sb-team"></span></p>
-        <hr />
+        <p>
+          <strong>Drużyna:</strong> <span id="sb-team"></span>
+          <button id="open-change-team-btn" class="change-team-btn">
+            Zmień (1000🪙)
+          </button>
+        </p>
+
+        <div id="team-change-modal" class="modal hidden">
+          <div class="modal-content team-selection-expanded white-theme">
+            <h2>Wybierz nową drogę</h2>
+            <p class="subtitle">Zmiana przeznaczenia kosztuje 1000 🪙</p>
+
+            <div class="team-grid">
+              <div class="team-card-big lightning" data-team="lightning">
+                <div class="icon">⚡</div>
+                <div class="name">Lightning</div>
+                <div class="bonus-tag">+10% Bonus</div>
+              </div>
+
+              <div class="team-card-big fire" data-team="fire">
+                <div class="icon">🔥</div>
+                <div class="name">Fire</div>
+                <div class="bonus-tag">+10% Bonus</div>
+              </div>
+
+              <div class="team-card-big water" data-team="water">
+                <div class="icon">💧</div>
+                <div class="name">Water</div>
+                <div class="bonus-tag">+10% Bonus</div>
+              </div>
+            </div>
+
+            <button id="cancel-team-change" class="cancel-btn">
+              Może później...
+            </button>
+          </div>
+        </div>
+        <div id="error-overlay" class="bonus-modal hidden">
+          <div class="bonus-content error-theme">
+            <div class="error-icon">❌</div>
+            <h2 id="error-title">Błąd!</h2>
+            <p id="error-message"></p>
+            <button class="close-error-btn">Zamknij</button>
+          </div>
+        </div>
+
+        <div id="confirm-overlay" class="bonus-modal hidden">
+          <div class="bonus-content confirm-theme">
+            <div class="butterfly-icon">🦋</div>
+            <h2>Jesteś pewien?</h2>
+            <p class="consequences">"This action will have consequences"</p>
+            <div class="confirm-btns">
+              <button id="confirm-yes">Tak, zmień</button>
+              <button id="confirm-no">Anuluj</button>
+            </div>
+          </div>
+        </div>
+        <p>
+          <strong>Typ:</strong> <span id="sb-fav-type"></span>
+          <button id="open-change-type-btn" class="change-team-btn">
+            Zmień (1000🪙)
+          </button>
+        </p>
+
+        <div id="type-change-modal" class="modal hidden">
+          <div class="modal-content team-selection-expanded white-theme">
+            <h2>Zmień ulubiony typ</h2>
+            <p class="subtitle">Koszt: 1000 🪙</p>
+
+            <div class="type-grid-scrollable"></div>
+
+            <button id="cancel-type-change" class="cancel-btn">Anuluj</button>
+          </div>
+        </div>
         <p><strong>Kolekcja:</strong> <span id="sb-card-count">0</span> kart</p>
         <button id="logout-btn">Wyloguj się</button>
       </div>
