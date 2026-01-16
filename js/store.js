@@ -12,13 +12,11 @@ export const store = {
         const key = `tcg_user_${username.trim().toLowerCase()}`;
         this.state.currentUserKey = key;
 
-        // Pobieramy dane – upewnij się, że nazwa zmiennej zgadza się z tą w IF
         const sessionData = localStorage.getItem(key);
 
         if (sessionData) {
             this.state.user = JSON.parse(sessionData);
         } else {
-            // 2. Jeśli nie ma sesji, szukamy w "bazie rejestracji"
             const allUsers = JSON.parse(localStorage.getItem('users')) || [];
             const foundUser = allUsers.find(
                 (u) =>
@@ -26,7 +24,6 @@ export const store = {
             );
 
             if (foundUser) {
-                // Przepisujemy dane z rejestracji do stanu aplikacji
                 this.state.user = {
                     username: foundUser.username,
                     email: foundUser.email,
@@ -40,7 +37,6 @@ export const store = {
                     streak: foundUser.stats?.streak || 0,
                 };
             } else {
-                // Ostateczność: tworzymy nowego (awaryjnie)
                 this.state.user = {
                     username: username,
                     coins: 100,
@@ -53,11 +49,30 @@ export const store = {
         }
         this.notify();
     },
-    //zmiana teamu (ligtning, fire, water)
+
+    setInitialFavoriteType(newType) {
+        if (!this.state.user) return;
+
+        this.state.user.favoriteType = newType;
+        this.state.user.hasChosenInitialType = true;
+
+        this.notify();
+
+        const allUsers = JSON.parse(localStorage.getItem('users')) || [];
+        const userIdx = allUsers.findIndex(
+            (u) =>
+                u.username.toLowerCase() ===
+                this.state.user.username.toLowerCase()
+        );
+        if (userIdx !== -1) {
+            allUsers[userIdx].favoriteType = newType;
+            localStorage.setItem('users', JSON.stringify(allUsers));
+        }
+    },
+
     changeTeam(newTeam) {
         if (this.state.user.coins < 1000) return false;
 
-        // 1. Aktualizacja bazy wszystkich użytkowników
         const allUsers = JSON.parse(localStorage.getItem('users')) || [];
         const userIdx = allUsers.findIndex(
             (u) =>
@@ -71,11 +86,9 @@ export const store = {
             localStorage.setItem('users', JSON.stringify(allUsers));
         }
 
-        // 2. Aktualizacja bieżącej sesji
         this.state.user.team = newTeam;
         this.state.user.coins -= 1000;
 
-        // 3. Powiadomienie systemowe (zmieni kolory i UI)
         this.notify();
         return true;
     },

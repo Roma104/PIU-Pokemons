@@ -105,6 +105,9 @@ if (typeGrid) {
         const btn = document.createElement('div');
         btn.className = 'type-item';
         btn.textContent = type;
+
+        btn.setAttribute('data-type', type);
+
         btn.onclick = async () => {
             if (type === store.state.user.favoriteType) {
                 showError('To już jest Twój ulubiony typ!');

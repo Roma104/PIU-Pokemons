@@ -211,29 +211,87 @@ body.team-water .sidebar-handle {
   }
 }
 
-.type-grid-scrollable {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 10px;
-  max-height: 300px;
-  overflow-y: auto;
-  padding: 10px;
-  margin: 20px 0;
-}
-
-.type-item {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  cursor: pointer;
-  text-align: center;
-  font-weight: bold;
-  transition: 0.2s;
-}
-
 .type-item:hover {
   background: #f0f0f0;
   transform: scale(1.05);
+}
+.type-grid-scrollable {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.type-item {
+  padding: 15px;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: transform 0.2s, brightness 0.2s;
+  text-align: center;
+}
+
+/* Kolory typów */
+.type-item[data-type='Normal'] {
+  background: #a8a878;
+}
+.type-item[data-type='Fire'] {
+  background: #f08030;
+}
+.type-item[data-type='Water'] {
+  background: #6890f0;
+}
+.type-item[data-type='Electric'] {
+  background: #f8d030;
+  color: #333;
+}
+.type-item[data-type='Grass'] {
+  background: #78c850;
+}
+.type-item[data-type='Ice'] {
+  background: #98d8d8;
+  color: #333;
+}
+.type-item[data-type='Fighting'] {
+  background: #c03028;
+}
+.type-item[data-type='Poison'] {
+  background: #a040a0;
+}
+.type-item[data-type='Ground'] {
+  background: #e0c068;
+}
+.type-item[data-type='Flying'] {
+  background: #a890f0;
+}
+.type-item[data-type='Psychic'] {
+  background: #f85888;
+}
+.type-item[data-type='Bug'] {
+  background: #a8b820;
+}
+.type-item[data-type='Rock'] {
+  background: #b8a038;
+}
+.type-item[data-type='Ghost'] {
+  background: #705898;
+}
+.type-item[data-type='Dragon'] {
+  background: #7038f8;
+}
+.type-item[data-type='Dark'] {
+  background: #705848;
+}
+.type-item[data-type='Steel'] {
+  background: #b8b8d0;
+  color: #333;
+}
+.type-item[data-type='Fairy'] {
+  background: #ee99ac;
 }
 
 body.loaded {

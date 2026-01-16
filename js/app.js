@@ -78,10 +78,39 @@ if (!currentUser) {
         }
 
         function processBonuses() {
-            if (pendingBonuses.length === 0) return;
+            if (pendingBonuses.length > 0) {
+                const current = pendingBonuses.shift();
+                showBonusModal(current.title, current.message, current.icon);
+            } else {
+                if (
+                    !store.state.user.favoriteType ||
+                    store.state.user.favoriteType === 'Normal'
+                ) {
+                    const typeModal =
+                        document.getElementById('type-change-modal');
+                    const typeModalTitle = typeModal.querySelector('h2');
+                    const typeModalSubtitle =
+                        typeModal.querySelector('.subtitle');
 
-            const current = pendingBonuses.shift();
-            showBonusModal(current.title, current.message, current.icon);
+                    typeModalTitle.textContent = 'Witaj w PokéCards!';
+                    typeModalSubtitle.textContent =
+                        'Wybierz swój pierwszy ulubiony typ (Bonus +10%) za darmo!';
+
+                    const typeBtns = typeModal.querySelectorAll('.type-item');
+                    typeBtns.forEach((btn) => {
+                        const originalClick = btn.onclick;
+                        btn.onclick = () => {
+                            store.setInitialFavoriteType(btn.textContent);
+                            typeModal.classList.add('hidden');
+                            typeBtns.forEach(
+                                (b) => (b.onclick = originalClick)
+                            );
+                        };
+                    });
+
+                    typeModal.classList.remove('hidden');
+                }
+            }
         }
 
         closeBonusBtn.onclick = () => {
