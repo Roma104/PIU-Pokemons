@@ -16,6 +16,9 @@ export const store = {
 
         if (sessionData) {
             this.state.user = JSON.parse(sessionData);
+            if (!this.state.user.favorites) {
+                this.state.user.favorites = [];
+            }
         } else {
             const allUsers = JSON.parse(localStorage.getItem('users')) || [];
             const foundUser = allUsers.find(
@@ -29,9 +32,10 @@ export const store = {
                     email: foundUser.email,
                     birthdate: foundUser.birthdate,
                     team: foundUser.team,
-                    favoriteType: 'Normal',
+                    favoriteType: foundUser.favoriteType || 'Normal',
                     coins: foundUser.stats?.coins || 100,
                     cards: foundUser.stats?.cards || [],
+                    favorites: foundUser.favorites || [],
                     lastLogin: null,
                     lastFreePack: null,
                     streak: foundUser.stats?.streak || 0,
@@ -41,6 +45,7 @@ export const store = {
                     username: username,
                     coins: 100,
                     cards: [],
+                    favorites: [],
                     lastLogin: null,
                     lastFreePack: null,
                     streak: 0,
@@ -56,8 +61,6 @@ export const store = {
         this.state.user.favoriteType = newType;
         this.state.user.hasChosenInitialType = true;
 
-        this.notify();
-
         const allUsers = JSON.parse(localStorage.getItem('users')) || [];
         const userIdx = allUsers.findIndex(
             (u) =>
@@ -68,14 +71,15 @@ export const store = {
             allUsers[userIdx].favoriteType = newType;
             localStorage.setItem('users', JSON.stringify(allUsers));
         }
+
+        this.notify();
     },
 
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-
-        const userIndex = users.findIndex(
-            (u) => u.username === this.state.user.username
     changeTeam(newTeam) {
-        if (this.state.user.coins < 1000) return false;
+        if (this.state.user.coins < 1000) {
+            alert(`Brakuje Ci ${1000 - this.state.user.coins} monet!`);
+            return false;
+        }
 
         const allUsers = JSON.parse(localStorage.getItem('users')) || [];
         const userIdx = allUsers.findIndex(
@@ -213,6 +217,7 @@ export const store = {
             streak: currentStreak,
         };
     },
+
     checkBirthdayBonus() {
         if (!this.state.user || !this.state.user.birthdate)
             return { awarded: false };

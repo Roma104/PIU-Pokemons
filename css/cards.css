@@ -719,11 +719,12 @@
 .empty-collection p {
   font-size: 1.1rem;
   margin: 5px 0;
-.card.shiny-boost,
-.opening-card-front.shiny-boost {
-  border: 3px solid #ffcb05 !important;
-  box-shadow: 0 0 20px rgba(255, 203, 5, 0.8) !important;
-  animation: shinyPulse 2s infinite ease-in-out;
+  .card.shiny-boost,
+  .opening-card-front.shiny-boost {
+    border: 3px solid #ffcb05 !important;
+    box-shadow: 0 0 20px rgba(255, 203, 5, 0.8) !important;
+    animation: shinyPulse 2s infinite ease-in-out;
+  }
 }
 
 @keyframes shinyPulse {
