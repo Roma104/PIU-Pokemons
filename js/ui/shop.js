@@ -12,7 +12,7 @@ let tempDrawnCards = [];
 let currentPackIsPaid = false;
 let isPackAnimationInProgress = false;
 
-// Funkcja pomocnicza do klas CSS (Musi być taka sama jak w cards.js dla spójności)
+// Funkcja pomocnicza do klas CSS
 function getCssClass(rarityText) {
     if (!rarityText) return 'common';
     const lower = rarityText.toLowerCase();
@@ -116,18 +116,15 @@ function flipAllCards() {
     unflipped.forEach((container, index) => {
         setTimeout(() => {
             container.classList.add('flipped');
-
-            // Używamy klasy obliczonej dynamicznie
             const rarity = container.dataset.rarityClass;
 
-            // Sprawdzamy czy zagrać dźwięk 'rare'
             if (
                 [
                     'legendary',
                     'epic',
                     'rainbow',
                     'shiny',
-                    'shiny-boost', // Dodano obsługę ulepszonej klasy
+                    'shiny-boost',
                     'ultra',
                     'holo',
                 ].includes(rarity)
@@ -158,7 +155,6 @@ function showOpeningScene(cards) {
         cardContainer.className = 'opening-card-container';
         cardContainer.style.animationDelay = `${index * 0.1}s`;
 
-        // Używamy klasy z obiektu karty (może być nadpisana przez Team Bonus)
         const cssClass = card.rarityClass;
         cardContainer.dataset.rarityClass = cssClass;
 
@@ -221,7 +217,6 @@ collectBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     if (!buttonsContainer.classList.contains('visible')) return;
 
-    // Dodajemy wylosowane karty (które mogą być już ulepszone)
     tempDrawnCards.forEach((card) => store.addCard(card));
 
     overlay.classList.remove('active');
@@ -253,31 +248,39 @@ rerollBtn.addEventListener('click', async (e) => {
 
 function generateCards(isPaid) {
     const newCards = [];
-    const userTeam = store.state.user?.team; // Pobieramy drużynę gracza
+    const userTeam = store.state.user?.team;
+    const favType = store.state.user?.favoriteType;
 
     for (let i = 0; i < 5; i++) {
         const card = getCachedTCGCard();
         if (!card) continue;
 
-        // 1. Obliczamy standardową klasę
         let correctClass = getCssClass(card.rarity);
         let finalName = card.name;
         let finalRarity = card.rarity;
         let isUpgraded = false;
 
-        // 2. Logika Team Bonus (zintegrowana z drugiego pliku)
-        // Sprawdzamy czy karta pasuje do drużyny gracza
-        if (userTeam && card.types) {
-            const matchesTeam = card.types.some(
-                (t) => t.toLowerCase() === userTeam.toLowerCase()
-            );
+        if (card.types) {
+            // BONUS 1: Drużyna
+            const matchesTeam =
+                userTeam &&
+                card.types.some(
+                    (t) => t.toLowerCase() === userTeam.toLowerCase()
+                );
 
-            // 10% szans na ulepszenie jeśli pasuje do teamu
-            if (matchesTeam && Math.random() < 0.1) {
+            // BONUS 2: Ulubiony Typ
+            const matchesFavType =
+                favType &&
+                card.types.some(
+                    (t) => t.toLowerCase() === favType.toLowerCase()
+                );
+
+            // 10% szansy jeśli pasuje do Teamu LUB Ulubionego Typu
+            if ((matchesTeam || matchesFavType) && Math.random() < 0.1) {
                 isUpgraded = true;
                 finalName = `⭐ ${card.name} ⭐`;
-                finalRarity = 'ULTRA RARE (Team Bonus)';
-                correctClass = 'shiny-boost'; // Specjalna klasa dla bonusu
+                finalRarity = 'ULTRA RARE (Bonus)';
+                correctClass = 'shiny-boost';
             }
         }
 
@@ -309,7 +312,7 @@ async function openPack(isPaid) {
         }
     }
 
-    currentPackIsPaid = isPaid; // Zapamiętujemy typ paczki dla rerolla!
+    currentPackIsPaid = isPaid;
     isPackAnimationInProgress = true;
     updateButtonsState();
 
