@@ -59,9 +59,10 @@ if (!currentUser) {
 
         if (userCoins === 100 && userCards.length === 0) {
             pendingBonuses.push({
-                title: 'Witaj w PIU-Pokemons!',
-                message: '🎁 Na start otrzymujesz: 100 monet!\n👉 Odbierz swój pierwszy DARMOWY PACK powyżej!',
-                icon: '👋'
+                title: 'Witaj w PokéCards!',
+                message:
+                    '🎁 Na start otrzymujesz: 100 🪙!\n 👉 Odbierz swój pierwszy DARMOWY PACK powyżej!',
+                icon: '👋',
             });
         } else {
             const bonusInfo = store.checkDailyBonus();
@@ -93,15 +94,19 @@ if (!currentUser) {
                     !store.state.user.favoriteType ||
                     store.state.user.favoriteType === 'Normal'
                 ) {
-                    const typeModal = document.getElementById('type-change-modal');
+                    const typeModal =
+                        document.getElementById('type-change-modal');
                     if (typeModal) {
                         const typeModalTitle = typeModal.querySelector('h2');
-                        const typeModalSubtitle = typeModal.querySelector('.subtitle');
+                        const typeModalSubtitle =
+                            typeModal.querySelector('.subtitle');
 
                         typeModalTitle.textContent = 'Witaj w PokéCards!';
-                        typeModalSubtitle.textContent = 'Wybierz swój pierwszy ulubiony typ (Bonus +10%) za darmo!';
+                        typeModalSubtitle.textContent =
+                            'Wybierz swój pierwszy ulubiony typ (Bonus +10%) za darmo!';
 
-                        const typeBtns = typeModal.querySelectorAll('.type-item');
+                        const typeBtns =
+                            typeModal.querySelectorAll('.type-item');
                         typeBtns.forEach((btn) => {
                             const originalClick = btn.onclick;
                             btn.onclick = () => {

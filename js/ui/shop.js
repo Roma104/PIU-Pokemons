@@ -214,6 +214,7 @@ flipAllBtn.addEventListener('click', (e) => {
 });
 
 collectBtn.addEventListener('click', (e) => {
+    playSound('accept');
     e.stopPropagation();
     if (!buttonsContainer.classList.contains('visible')) return;
 

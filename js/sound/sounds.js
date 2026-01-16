@@ -5,6 +5,7 @@ const sounds = {
     coin1: new Audio('./assets/sounds/coin1.mp3'),
     coin2: new Audio('./assets/sounds/coin2.mp3'),
     cardClick: new Audio('./assets/sounds/card-click1.mp3'),
+    accept: new Audio('./assets/sounds/accept2.mp3'),
 };
 
 Object.values(sounds).forEach((sound) => {

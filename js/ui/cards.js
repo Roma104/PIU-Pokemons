@@ -5,7 +5,7 @@ const container = document.getElementById('cards-container');
 const modal = document.getElementById('card-modal');
 const modalImage = document.getElementById('modal-image');
 const closeModal = document.getElementById('close-modal');
-const modalContent = document.querySelector('.modal-content');
+const modalContent = modal.querySelector('.modal-content');
 const rarityDiv = document.getElementById('modal-rarity');
 const sortSelect = document.getElementById('sort-select');
 const searchInput = document.getElementById('search-input');
@@ -162,16 +162,24 @@ function renderCards() {
     const cardsToRender = getSortedCards(filteredCards);
 
     if (cardsToRender.length === 0) {
-        container.innerHTML = searchTerm
-            ? '<p style="text-align:center; width:100%; color: #334155; margin-top: 50px; font-size: 1.2rem; font-weight: bold;">Nie znaleziono kart pasujących do wyszukiwania.</p>'
-            : '<p style="text-align:center; width:100%; color: #334155; margin-top: 50px; font-size: 1.2rem; font-weight: bold;">Brak kart do wyświetlenia.</p>';
-        container.innerHTML = `
-            <div class="empty-collection">
-                <h3>Pusto tu... 🍃</h3>
-                <p>Nie masz jeszcze żadnych kart w kolekcji.</p>
-                <p>Kliknij <strong>"Darmowy pack"</strong> u góry, aby zacząć!</p>
-            </div>
-        `;
+        if (searchTerm) {
+            container.innerHTML = `
+                <div style="text-align: center; width: 100%; padding: 40px; color: #555;">
+                    <div style="font-size: 40px; margin-bottom: 10px;">🔍</div>
+                    <h3 style="margin: 0; font-size: 1.2em;">Brak wyników</h3>
+                    <p style="margin-top: 5px;">Nie znaleziono kart dla frazy: <strong>"${searchInput.value}"</strong></p>
+                </div>
+            `;
+        } else {
+            container.innerHTML = `
+                <div style="text-align: center; width: 100%; padding: 40px; color: #555;">
+                    <div style="font-size: 40px; margin-bottom: 10px;">🍃</div>
+                    <h3 style="margin: 0; font-size: 1.2em;">Pusto tu...</h3>
+                    <p style="margin-top: 5px;">Nie masz jeszcze żadnych kart w kolekcji.</p>
+                    <p style="font-size: 0.9em; opacity: 0.8;">Kliknij "Darmowy pack" u góry, aby zacząć!</p>
+                </div>
+            `;
+        }
         return;
     }
 
