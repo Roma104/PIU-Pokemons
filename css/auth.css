@@ -39,6 +39,7 @@ body {
   padding: 0;
   overflow: hidden;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  cursor: url('../assets/images/pokeball-cursor-point.png'), auto;
 }
 
 .team-options {
@@ -110,7 +111,7 @@ body.fade-out .auth-card {
 .auth-card {
   background: var(--form-glass-bg);
   backdrop-filter: blur(15px) saturate(120%);
-  -webkit-backdrop-filter: blur(15px) saturate(120%); /* dla safari bo czemu nie, nie dyskryminuje */
+  -webkit-backdrop-filter: blur(15px) saturate(120%);
   padding: 40px 30px;
   width: 340px;
   border-radius: 24px;
@@ -153,7 +154,7 @@ body.fade-out .auth-card {
   color: white;
   font-weight: bold;
   font-size: 1rem;
-  cursor: pointer;
+  cursor: url('../assets/images/pokeball-cursor-touch.png'), pointer;
   transition: background-color 0.3s, transform 0.2s;
 }
 
@@ -220,6 +221,17 @@ body.fade-out .auth-card {
       rgba(226, 235, 240, 0.4)
     ),
     url('/assets/images/contender1.webp');
+}
+
+button,
+.team-card,
+.switch span,
+label,
+a,
+select,
+input,
+textarea {
+  cursor: url('../assets/images/pokeball-cursor-touch.png'), pointer;
 }
 
 @media (min-width: 2500px) {
