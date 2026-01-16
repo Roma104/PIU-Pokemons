@@ -70,6 +70,10 @@ export const store = {
         }
     },
 
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+
+        const userIndex = users.findIndex(
+            (u) => u.username === this.state.user.username
     changeTeam(newTeam) {
         if (this.state.user.coins < 1000) return false;
 
@@ -90,6 +94,7 @@ export const store = {
         this.state.user.coins -= 1000;
 
         this.notify();
+        alert(`Witamy w drużynie ${newTeam}! Pobrano 1000 monet.`);
         return true;
     },
 
@@ -213,19 +218,18 @@ export const store = {
             return { awarded: false };
 
         const now = new Date();
-        const todayMonthDay = `${now.getMonth() + 1}-${now.getDate()}`; // Format M-D
+        const todayMonthDay = `${now.getMonth() + 1}-${now.getDate()}`;
 
         const bday = new Date(this.state.user.birthdate);
         const bdayMonthDay = `${bday.getMonth() + 1}-${bday.getDate()}`;
 
-        // Sprawdzamy też, czy bonus nie został już odebrany w tym roku
         const currentYear = now.getFullYear();
         if (
             todayMonthDay === bdayMonthDay &&
             this.state.user.lastBirthdayBonusYear !== currentYear
         ) {
             this.state.user.coins += 100;
-            this.state.user.lastBirthdayBonusYear = currentYear; // Zapisujemy rok odebrania
+            this.state.user.lastBirthdayBonusYear = currentYear;
             this.notify();
             return { awarded: true, bonus: 100 };
         }
@@ -243,6 +247,22 @@ export const store = {
         if (!this.state.user) return;
         const today = new Date().toDateString();
         this.state.user.lastFreePack = today;
+        this.notify();
+    },
+
+    toggleFavorite(cardId) {
+        if (!this.state.user.favorites) {
+            this.state.user.favorites = [];
+        }
+
+        const index = this.state.user.favorites.indexOf(cardId);
+
+        if (index === -1) {
+            this.state.user.favorites.push(cardId);
+        } else {
+            this.state.user.favorites.splice(index, 1);
+        }
+
         this.notify();
     },
 };
