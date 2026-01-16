@@ -38,7 +38,6 @@ if (!currentUser) {
         }
     };
 
-    // Wywołanie natychmiastowe (aby kolory były od razu)
     applyTeamTheme(store.state);
 
     store.subscribe(applyTeamTheme);
@@ -48,33 +47,41 @@ if (!currentUser) {
             document.body.classList.add('loaded');
         }, 10);
 
-        // Dźwięk powitalny
         try {
             const welcomeSound = new Audio('./assets/sounds/intro-music.mp3');
             welcomeSound.volume = 0.3;
             welcomeSound.play().catch(() => {});
         } catch (e) {}
 
-        // Sprawdzenie Daily Bonus
-        const bonusInfo = store.checkDailyBonus();
-        const bdayInfo = store.checkBirthdayBonus();
-
+        const userCards = store.state.user.cards || [];
+        const userCoins = store.state.user.coins;
         const pendingBonuses = [];
 
-        if (bdayInfo.awarded) {
+        if (userCoins === 100 && userCards.length === 0) {
             pendingBonuses.push({
-                title: 'Wszystkiego najlepszego!',
-                message: `Z okazji urodzin otrzymujesz specjalny prezent: ${bdayInfo.bonus} 🪙!`,
-                icon: '🎂',
+                title: 'Witaj w PIU-Pokemons!',
+                message: '🎁 Na start otrzymujesz: 100 monet!\n👉 Odbierz swój pierwszy DARMOWY PACK powyżej!',
+                icon: '👋'
             });
-        }
+        } else {
+            const bonusInfo = store.checkDailyBonus();
+            const bdayInfo = store.checkBirthdayBonus();
 
-        if (bonusInfo.awarded) {
-            pendingBonuses.push({
-                title: 'Daily Bonus!',
-                message: `Dzień streaka: ${bonusInfo.streak}. Otrzymujesz ${bonusInfo.bonus} 🪙!`,
-                icon: '🪙',
-            });
+            if (bdayInfo.awarded) {
+                pendingBonuses.push({
+                    title: 'Wszystkiego najlepszego!',
+                    message: `Z okazji urodzin otrzymujesz specjalny prezent: ${bdayInfo.bonus} 🪙!`,
+                    icon: '🎂',
+                });
+            }
+
+            if (bonusInfo.awarded) {
+                pendingBonuses.push({
+                    title: 'Daily Bonus!',
+                    message: `Dzień streaka: ${bonusInfo.streak}🔥. Otrzymujesz ${bonusInfo.bonus} 🪙!`,
+                    icon: '🪙',
+                });
+            }
         }
 
         function processBonuses() {
@@ -86,29 +93,28 @@ if (!currentUser) {
                     !store.state.user.favoriteType ||
                     store.state.user.favoriteType === 'Normal'
                 ) {
-                    const typeModal =
-                        document.getElementById('type-change-modal');
-                    const typeModalTitle = typeModal.querySelector('h2');
-                    const typeModalSubtitle =
-                        typeModal.querySelector('.subtitle');
+                    const typeModal = document.getElementById('type-change-modal');
+                    if (typeModal) {
+                        const typeModalTitle = typeModal.querySelector('h2');
+                        const typeModalSubtitle = typeModal.querySelector('.subtitle');
 
-                    typeModalTitle.textContent = 'Witaj w PokéCards!';
-                    typeModalSubtitle.textContent =
-                        'Wybierz swój pierwszy ulubiony typ (Bonus +10%) za darmo!';
+                        typeModalTitle.textContent = 'Witaj w PokéCards!';
+                        typeModalSubtitle.textContent = 'Wybierz swój pierwszy ulubiony typ (Bonus +10%) za darmo!';
 
-                    const typeBtns = typeModal.querySelectorAll('.type-item');
-                    typeBtns.forEach((btn) => {
-                        const originalClick = btn.onclick;
-                        btn.onclick = () => {
-                            store.setInitialFavoriteType(btn.textContent);
-                            typeModal.classList.add('hidden');
-                            typeBtns.forEach(
-                                (b) => (b.onclick = originalClick)
-                            );
-                        };
-                    });
+                        const typeBtns = typeModal.querySelectorAll('.type-item');
+                        typeBtns.forEach((btn) => {
+                            const originalClick = btn.onclick;
+                            btn.onclick = () => {
+                                store.setInitialFavoriteType(btn.textContent);
+                                typeModal.classList.add('hidden');
+                                typeBtns.forEach(
+                                    (b) => (b.onclick = originalClick)
+                                );
+                            };
+                        });
 
-                    typeModal.classList.remove('hidden');
+                        typeModal.classList.remove('hidden');
+                    }
                 }
             }
         }
