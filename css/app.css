@@ -132,6 +132,7 @@ main {
   gap: 20px;
   justify-content: center;
   width: 100%;
+  padding-top: 20px;
 }
 
 #user-sidebar {
@@ -204,6 +205,8 @@ main {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .sidebar-content p strong {
@@ -211,6 +214,7 @@ main {
   opacity: 0.8;
   text-transform: uppercase;
   margin-right: 8px;
+  flex-shrink: 0;
 }
 
 .sidebar-content p span {
@@ -322,10 +326,9 @@ main {
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
   border: 4px solid var(--primary-color);
   animation: popupAnim 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.bonus-content p {
-  white-space: pre-line;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 @keyframes popupAnim {
@@ -339,10 +342,13 @@ main {
   }
 }
 
-#bonus-icon {
-  font-size: 70px;
-  margin-bottom: 15px;
+.butterfly-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
   display: block;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1;
   filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.2));
 }
 
@@ -355,9 +361,10 @@ main {
 
 .bonus-content p {
   font-size: 1.2em;
-  margin: 15px 0 30px 0;
+  margin: 15px 0 20px 0;
   color: #4a5568;
   line-height: 1.4;
+  white-space: pre-line;
 }
 
 #close-bonus-btn {
@@ -801,23 +808,417 @@ body.team-water #confirm-no {
 }
 
 .cancel-btn {
-  display: block;
-  width: 100%;
-  margin-top: 20px;
-  background: #f0f0f0;
-  color: #666;
-  border: 1px solid #ddd;
-  padding: 12px;
+  margin-top: 25px;
+  background: #e2e8f0;
+  color: #4a5568;
+  border: none;
+  padding: 10px 25px;
   border-radius: 12px;
   font-weight: bold;
   cursor: pointer;
   text-decoration: none;
+  display: inline-block;
   transition: all 0.2s;
-  text-transform: uppercase;
-  font-size: 0.9em;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .cancel-btn:hover {
-  background: #e0e0e0;
-  color: #333;
+  background: #cbd5e1;
+  color: #2d3748;
+  transform: translateY(-2px);
+}
+
+/* CONFIRM MODAL BUTTONS */
+.confirm-btns {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+  width: 100%;
+}
+
+#confirm-yes {
+  background: #22c55e;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 12px;
+  border: none;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+#confirm-yes:hover {
+  transform: scale(1.05);
+  background: #16a34a;
+}
+
+#confirm-no {
+  background: #94a3b8;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 12px;
+  border: none;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+#confirm-no:hover {
+  transform: scale(1.05);
+  background: #64748b;
+}
+
+@keyframes shine-move {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+@keyframes rainbow-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes holo-sparkle {
+  0%,
+  100% {
+    opacity: 0.3;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.6;
+    filter: brightness(1.3);
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.card.rare {
+  border-color: #93c5fd;
+}
+.card.holo {
+  border-color: #5eead4;
+}
+.card.epic {
+  border-color: #c084fc;
+}
+.card.legendary {
+  border-color: #fde047;
+}
+.card.ultra {
+  border-color: #fdba74;
+}
+.card.promo {
+  border-color: #f9a8d4;
+}
+.card.shiny {
+  border-color: #cbd5e1;
+}
+.card.rainbow {
+  border-color: #d8b4fe;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 12px;
+}
+
+.card img {
+  z-index: 1 !important;
+}
+
+.card h3,
+.card p,
+.card .fav-icon {
+  z-index: 10 !important;
+}
+
+.card.rare::after {
+  opacity: 0.3;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.6) 50%,
+    transparent 65%
+  );
+  background-size: 200% 100%;
+  animation: shine-move 4s infinite ease-in-out;
+  mix-blend-mode: overlay;
+}
+
+.card.holo::after {
+  opacity: 0.6;
+  background: repeating-linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 15%,
+    rgba(255, 255, 255, 0.4) 20%,
+    rgba(255, 255, 255, 0.2) 25%,
+    transparent 40%
+  );
+  background-size: 250% 250%;
+  animation: shine-move 5s infinite linear;
+  mix-blend-mode: hard-light;
+}
+
+.card.epic::after {
+  opacity: 0.4;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(147, 51, 234, 0.3) 45%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(147, 51, 234, 0.3) 55%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: shine-move 4s infinite linear;
+  mix-blend-mode: color-dodge;
+}
+
+.card.legendary::after {
+  opacity: 0.7;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 215, 0, 0.2) 35%,
+    rgba(255, 255, 220, 0.8) 50%,
+    rgba(255, 215, 0, 0.2) 65%,
+    transparent 80%
+  );
+  background-size: 250% 100%;
+  animation: shine-move 3s infinite ease-in-out;
+  mix-blend-mode: overlay;
+}
+
+.card.rainbow::after {
+  opacity: 0.4;
+  background: linear-gradient(
+    115deg,
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00c8,
+    #ff0000
+  );
+  background-size: 400% 400%;
+  animation: rainbow-move 4s ease infinite;
+  mix-blend-mode: overlay;
+}
+
+.card.ultra::after {
+  opacity: 0.5;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(249, 115, 22, 0.3) 45%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(249, 115, 22, 0.3) 55%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: shine-move 3s infinite;
+  mix-blend-mode: overlay;
+}
+
+.card.shiny::after {
+  opacity: 0.5;
+  background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.9) 10%,
+      transparent 10.5%
+    ),
+    linear-gradient(
+      125deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.8) 50%,
+      transparent 70%
+    );
+  background-size: 20px 20px, 200% 200%;
+  background-position: 0 0, 0 0;
+  animation: holo-sparkle 2s infinite, shine-move 3s infinite linear;
+  mix-blend-mode: color-dodge;
+}
+
+.card.promo::after {
+  opacity: 0.4;
+  background: linear-gradient(
+    125deg,
+    transparent 30%,
+    rgba(236, 72, 153, 0.3) 45%,
+    rgba(255, 200, 255, 0.7) 50%,
+    rgba(236, 72, 153, 0.3) 55%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: shine-move 5s infinite linear;
+  mix-blend-mode: overlay;
+}
+
+#pack-opening-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, #1e293b 0%, #000000 100%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  perspective: 1000px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+#pack-opening-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#pack-cards-area {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 1300px;
+  padding: 20px;
+}
+
+.opening-card-container {
+  width: 220px;
+  height: 330px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.opening-card-container.flipped {
+  transform: rotateY(180deg);
+}
+
+.opening-card-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.opening-card-back {
+  background: linear-gradient(135deg, #0f172a, #334155);
+  border: 4px solid #475569;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.opening-card-back::after {
+  content: 'POKÉMON';
+  color: rgba(255, 255, 255, 0.1);
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.opening-card-container .modal-content {
+  transform: rotateY(180deg);
+  width: 100%;
+  height: 100%;
+  border-width: 2px;
+}
+
+#pack-buttons-container {
+  display: none;
+  gap: 20px;
+}
+#pack-buttons-container.visible {
+  display: flex;
+  animation: pop-in 0.3s;
+}
+
+.overlay-btn {
+  padding: 12px 30px;
+  border-radius: 30px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  font-size: 1rem;
+}
+#collect-btn {
+  background: #22c55e;
+}
+#reroll-btn {
+  background: #f59e0b;
+}
+#flip-all-btn {
+  background: #3b82f6;
+  position: absolute;
+  bottom: 100px;
+  opacity: 0;
+  pointer-events: none;
+}
+#flip-all-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.empty-state-box {
+  width: 100% !important;
+  min-width: 100% !important;
+  flex-basis: 100% !important;
+  flex-grow: 1 !important;
+  grid-column: 1 / -1 !important;
+  margin: 20px 0;
+  padding: 60px 20px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px dashed #cbd5e1;
+  border-radius: 20px;
+  text-align: center;
+  color: #64748b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.empty-state-box h3 {
+  font-size: 1.5em;
+  margin: 10px 0;
+  color: #334155;
+}
+
+.empty-state-box p {
+  margin: 5px 0;
+  font-size: 1.1em;
 }
