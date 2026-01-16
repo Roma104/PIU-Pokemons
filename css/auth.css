@@ -105,7 +105,7 @@ body.fade-out .auth-card {
   background-position: center bottom !important;
   background-repeat: no-repeat !important;
   background-color: #333;
-  background-image: url('/assets/images/contender2.webp'); /*fallback*/
+  background-image: url('/assets/images/contender2.webp');
 }
 
 .auth-card {

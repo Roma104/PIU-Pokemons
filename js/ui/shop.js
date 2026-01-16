@@ -246,51 +246,73 @@ rerollBtn.addEventListener('click', async (e) => {
     const newCards = generateCards(currentPackIsPaid);
     showOpeningScene(newCards);
 });
-
 function generateCards(isPaid) {
     const newCards = [];
     const userTeam = store.state.user?.team;
     const favType = store.state.user?.favoriteType;
 
     for (let i = 0; i < 5; i++) {
-        const card = getCachedTCGCard();
+        let card = null;
+
+        if (
+            i === 0 &&
+            favType &&
+            favType !== 'Normal' &&
+            favType !== 'null' &&
+            favType !== null
+        ) {
+            let attempts = 0;
+            while (attempts < 200) {
+                const potentialCard = getCachedTCGCard();
+                if (
+                    potentialCard &&
+                    potentialCard.types &&
+                    potentialCard.types.some(
+                        (t) => t.toLowerCase() === favType.toLowerCase()
+                    )
+                ) {
+                    card = potentialCard;
+                    console.log(
+                        `%c GWARANCJA TYPU: Trafiono ${card.name} po ${attempts} próbach.`,
+                        'color: #2ecc71; font-weight: bold;'
+                    );
+                    break;
+                }
+                attempts++;
+            }
+        }
+
+        if (!card) {
+            card = getCachedTCGCard();
+        }
+
         if (!card) continue;
 
-        let correctClass = getCssClass(card.rarity);
+        let correctClass = card.rarityClass || getCssClass(card.rarity);
         let finalName = card.name;
         let finalRarity = card.rarity;
         let isUpgraded = false;
 
-        if (card.types) {
-            // BONUS 1: Drużyna
-            const matchesTeam =
-                userTeam &&
-                card.types.some(
-                    (t) => t.toLowerCase() === userTeam.toLowerCase()
-                );
+        if (card.types && userTeam) {
+            const matchesTeam = card.types.some(
+                (t) => t.toLowerCase() === userTeam.toLowerCase()
+            );
 
-            // BONUS 2: Ulubiony Typ
-            const matchesFavType =
-                favType &&
-                card.types.some(
-                    (t) => t.toLowerCase() === favType.toLowerCase()
-                );
-
-            // 10% szansy jeśli pasuje do Teamu LUB Ulubionego Typu
-            if ((matchesTeam || matchesFavType) && Math.random() < 0.1) {
+            if (matchesTeam && Math.random() < 0.1) {
                 isUpgraded = true;
                 finalName = `⭐ ${card.name} ⭐`;
-                finalRarity = 'ULTRA RARE (Bonus)';
+                finalRarity = 'ULTRA RARE (Team Bonus)';
                 correctClass = 'shiny-boost';
             }
         }
 
         newCards.push({
-            id: Date.now() + i,
+            id: Date.now() + i + Math.random(),
             name: finalName,
             image: card.image,
             rarity: finalRarity,
             rarityClass: correctClass,
+            types: card.types || [],
             teamBonus: isUpgraded,
         });
     }
