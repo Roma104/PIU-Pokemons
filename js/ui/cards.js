@@ -5,7 +5,7 @@ const container = document.getElementById('cards-container');
 const modal = document.getElementById('card-modal');
 const modalImage = document.getElementById('modal-image');
 const closeModal = document.getElementById('close-modal');
-const modalContent = modal.querySelector('.modal-content');
+const modalContent = modal ? modal.querySelector('.modal-content') : null;
 const rarityDiv = document.getElementById('modal-rarity');
 const sortSelect = document.getElementById('sort-select');
 const searchInput = document.getElementById('search-input');
@@ -164,18 +164,18 @@ function renderCards() {
     if (cardsToRender.length === 0) {
         if (searchTerm) {
             container.innerHTML = `
-                <div style="text-align: center; width: 100%; padding: 40px; color: #555;">
+                <div class="empty-state-box">
                     <div style="font-size: 40px; margin-bottom: 10px;">🔍</div>
-                    <h3 style="margin: 0; font-size: 1.2em;">Brak wyników</h3>
-                    <p style="margin-top: 5px;">Nie znaleziono kart dla frazy: <strong>"${searchInput.value}"</strong></p>
+                    <h3>Brak wyników</h3>
+                    <p>Nie znaleziono kart dla frazy: <strong>"${searchInput.value}"</strong></p>
                 </div>
             `;
         } else {
             container.innerHTML = `
-                <div style="text-align: center; width: 100%; padding: 40px; color: #555;">
+                <div class="empty-state-box">
                     <div style="font-size: 40px; margin-bottom: 10px;">🍃</div>
-                    <h3 style="margin: 0; font-size: 1.2em;">Pusto tu...</h3>
-                    <p style="margin-top: 5px;">Nie masz jeszcze żadnych kart w kolekcji.</p>
+                    <h3>Pusto tu...</h3>
+                    <p>Nie masz jeszcze żadnych kart w kolekcji.</p>
                     <p style="font-size: 0.9em; opacity: 0.8;">Kliknij "Darmowy pack" u góry, aby zacząć!</p>
                 </div>
             `;
@@ -216,14 +216,17 @@ function renderCards() {
             }
             playSound('cardClick');
 
-            modalImage.src = card.image;
-            modalContent.className = `modal-content ${cssClass}`;
-            modalContent.dataset.rarity = card.rarity;
+            if (modalImage && modalContent) {
+                modalImage.src = card.image;
+                modalContent.className = `modal-content ${cssClass}`;
+                modalContent.dataset.rarity = card.rarity;
 
-            rarityDiv.textContent = card.rarity || 'Common';
-            rarityDiv.className = `rarity ${cssClass}`;
-
-            modal.classList.remove('hidden');
+                if (rarityDiv) {
+                    rarityDiv.textContent = card.rarity || 'Common';
+                    rarityDiv.className = `rarity ${cssClass}`;
+                }
+                modal.classList.remove('hidden');
+            }
         });
 
         container.appendChild(div);
@@ -238,12 +241,16 @@ if (store.state.user) {
     renderCards();
 }
 
-closeModal.addEventListener('click', () => {
-    modal.classList.add('hidden');
-});
-
-modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
+if (closeModal) {
+    closeModal.addEventListener('click', () => {
         modal.classList.add('hidden');
-    }
-});
+    });
+}
+
+if (modal) {
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.add('hidden');
+        }
+    });
+}
