@@ -55,20 +55,17 @@ if (!currentUser) {
 
         const userCards = store.state.user.cards || [];
         const userCoins = store.state.user.coins;
+        const pendingBonuses = [];
 
         if (userCoins === 100 && userCards.length === 0) {
-            setTimeout(() => {
-                alert(
-                    `Witaj w PIU-Pokemons!\n\n` +
-                        `🎁 Na start otrzymujesz: 100 monet!\n` +
-                        `👉 Odbierz swój pierwszy DARMOWY PACK powyżej!`
-                );
-            }, 500);
+            pendingBonuses.push({
+                title: 'Witaj w PIU-Pokemons!',
+                message: '🎁 Na start otrzymujesz: 100 monet!\n👉 Odbierz swój pierwszy DARMOWY PACK powyżej!',
+                icon: '👋'
+            });
         } else {
             const bonusInfo = store.checkDailyBonus();
             const bdayInfo = store.checkBirthdayBonus();
-
-            const pendingBonuses = [];
 
             if (bdayInfo.awarded) {
                 pendingBonuses.push({
@@ -85,21 +82,49 @@ if (!currentUser) {
                     icon: '🪙',
                 });
             }
+        }
 
-            function processBonuses() {
-                if (pendingBonuses.length === 0) return;
-
+        function processBonuses() {
+            if (pendingBonuses.length > 0) {
                 const current = pendingBonuses.shift();
                 showBonusModal(current.title, current.message, current.icon);
+            } else {
+                if (
+                    !store.state.user.favoriteType ||
+                    store.state.user.favoriteType === 'Normal'
+                ) {
+                    const typeModal = document.getElementById('type-change-modal');
+                    if (typeModal) {
+                        const typeModalTitle = typeModal.querySelector('h2');
+                        const typeModalSubtitle = typeModal.querySelector('.subtitle');
+
+                        typeModalTitle.textContent = 'Witaj w PokéCards!';
+                        typeModalSubtitle.textContent = 'Wybierz swój pierwszy ulubiony typ (Bonus +10%) za darmo!';
+
+                        const typeBtns = typeModal.querySelectorAll('.type-item');
+                        typeBtns.forEach((btn) => {
+                            const originalClick = btn.onclick;
+                            btn.onclick = () => {
+                                store.setInitialFavoriteType(btn.textContent);
+                                typeModal.classList.add('hidden');
+                                typeBtns.forEach(
+                                    (b) => (b.onclick = originalClick)
+                                );
+                            };
+                        });
+
+                        typeModal.classList.remove('hidden');
+                    }
+                }
             }
-
-            closeBonusBtn.onclick = () => {
-                bonusOverlay.classList.add('hidden');
-                setTimeout(processBonuses, 300);
-            };
-
-            processBonuses();
         }
+
+        closeBonusBtn.onclick = () => {
+            bonusOverlay.classList.add('hidden');
+            setTimeout(processBonuses, 300);
+        };
+
+        processBonuses();
     };
 
     if (document.readyState === 'loading') {
