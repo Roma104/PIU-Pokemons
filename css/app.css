@@ -169,6 +169,91 @@ button:hover {
   transform: scale(1.1);
 }
 
+#search-input {
+  padding: 8px 15px;
+  border-radius: 10px;
+  border: 2px solid var(--primary-dark);
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+  font-family: inherit;
+  font-weight: bold;
+  outline: none;
+  width: 200px;
+  cursor: text;
+  transition: all 0.2s;
+}
+
+#search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+#search-input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px var(--screen-glow);
+}
+
+body.team-lightning #search-input {
+  color: #000;
+}
+body.team-lightning #search-input::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+card {
+  position: relative;
+}
+
+.fav-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 20;
+
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+
+  transition: transform 0.2s, color 0.2s;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  user-select: none;
+}
+
+.fav-icon:hover {
+  transform: scale(1.2);
+  color: rgba(255, 255, 255, 1);
+}
+
+.fav-icon.active {
+  color: #ff4757;
+  text-shadow: 0 0 10px rgba(255, 71, 87, 0.6);
+}
+
+.fav-icon.active:active {
+  transform: scale(0.9);
+}
+
+#search-input {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #555 !important;
+  opacity: 1 !important;
+  z-index: 100;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#search-input::placeholder {
+  color: #777 !important;
+}
+
+.fav-icon {
+  z-index: 50 !important;
+  cursor: pointer;
+}
+
+.card {
+  position: relative;
+  overflow: visible !important;
+}
+
 @keyframes popupAnim {
   to {
     transform: scale(1);

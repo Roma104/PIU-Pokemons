@@ -12,13 +12,11 @@ export const store = {
         const key = `tcg_user_${username.trim().toLowerCase()}`;
         this.state.currentUserKey = key;
 
-        // Pobieramy dane – upewnij się, że nazwa zmiennej zgadza się z tą w IF
         const sessionData = localStorage.getItem(key);
 
         if (sessionData) {
             this.state.user = JSON.parse(sessionData);
         } else {
-            // 2. Jeśli nie ma sesji, szukamy w "bazie rejestracji"
             const allUsers = JSON.parse(localStorage.getItem('users')) || [];
             const foundUser = allUsers.find(
                 (u) =>
@@ -26,7 +24,6 @@ export const store = {
             );
 
             if (foundUser) {
-                // Przepisujemy dane z rejestracji do stanu aplikacji
                 this.state.user = {
                     username: foundUser.username,
                     email: foundUser.email,
@@ -38,7 +35,6 @@ export const store = {
                     streak: foundUser.stats?.streak || 0,
                 };
             } else {
-                // Ostateczność: tworzymy nowego (awaryjnie)
                 this.state.user = {
                     username: username,
                     coins: 100,
@@ -58,10 +54,8 @@ export const store = {
             return false;
         }
 
-        // 1. Pobierz aktualną listę wszystkich użytkowników
         const users = JSON.parse(localStorage.getItem('users')) || [];
 
-        // 2. Znajdź obecnego użytkownika i zaktualizuj go w "bazie"
         const userIndex = users.findIndex(
             (u) => u.username === this.state.user.username
         );
@@ -71,11 +65,10 @@ export const store = {
             localStorage.setItem('users', JSON.stringify(users));
         }
 
-        // 3. Zaktualizuj aktywną sesję
         this.state.user.team = newTeam;
         this.state.user.coins -= 1000;
 
-        this.notify(); // To odświeży kolory na stronie dzięki subskrypcji w app.js
+        this.notify();
         alert(`Witamy w drużynie ${newTeam}! Pobrano 1000 monet.`);
         return true;
     },
@@ -176,19 +169,18 @@ export const store = {
             return { awarded: false };
 
         const now = new Date();
-        const todayMonthDay = `${now.getMonth() + 1}-${now.getDate()}`; // Format M-D
+        const todayMonthDay = `${now.getMonth() + 1}-${now.getDate()}`;
 
         const bday = new Date(this.state.user.birthdate);
         const bdayMonthDay = `${bday.getMonth() + 1}-${bday.getDate()}`;
 
-        // Sprawdzamy też, czy bonus nie został już odebrany w tym roku
         const currentYear = now.getFullYear();
         if (
             todayMonthDay === bdayMonthDay &&
             this.state.user.lastBirthdayBonusYear !== currentYear
         ) {
             this.state.user.coins += 100;
-            this.state.user.lastBirthdayBonusYear = currentYear; // Zapisujemy rok odebrania
+            this.state.user.lastBirthdayBonusYear = currentYear;
             this.notify();
             return { awarded: true, bonus: 100 };
         }
@@ -206,6 +198,22 @@ export const store = {
         if (!this.state.user) return;
         const today = new Date().toDateString();
         this.state.user.lastFreePack = today;
+        this.notify();
+    },
+
+    toggleFavorite(cardId) {
+        if (!this.state.user.favorites) {
+            this.state.user.favorites = [];
+        }
+
+        const index = this.state.user.favorites.indexOf(cardId);
+
+        if (index === -1) {
+            this.state.user.favorites.push(cardId);
+        } else {
+            this.state.user.favorites.splice(index, 1);
+        }
+
         this.notify();
     },
 };
