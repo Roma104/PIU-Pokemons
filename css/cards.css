@@ -698,3 +698,42 @@
 .opening-card-container .modal-content.ultra .rarity {
   background-color: rgba(249, 115, 22, 0.95);
 }
+
+.empty-collection {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  margin-top: 20px;
+  border: 2px dashed #ccc;
+}
+
+.empty-collection h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.empty-collection p {
+  font-size: 1.1rem;
+  margin: 5px 0;
+.card.shiny-boost,
+.opening-card-front.shiny-boost {
+  border: 3px solid #ffcb05 !important;
+  box-shadow: 0 0 20px rgba(255, 203, 5, 0.8) !important;
+  animation: shinyPulse 2s infinite ease-in-out;
+}
+
+@keyframes shinyPulse {
+  0% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.3) contrast(1.1);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}

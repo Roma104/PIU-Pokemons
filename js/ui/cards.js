@@ -165,6 +165,13 @@ function renderCards() {
         container.innerHTML = searchTerm
             ? '<p style="text-align:center; width:100%; color: #334155; margin-top: 50px; font-size: 1.2rem; font-weight: bold;">Nie znaleziono kart pasujących do wyszukiwania.</p>'
             : '<p style="text-align:center; width:100%; color: #334155; margin-top: 50px; font-size: 1.2rem; font-weight: bold;">Brak kart do wyświetlenia.</p>';
+        container.innerHTML = `
+            <div class="empty-collection">
+                <h3>Pusto tu... 🍃</h3>
+                <p>Nie masz jeszcze żadnych kart w kolekcji.</p>
+                <p>Kliknij <strong>"Darmowy pack"</strong> u góry, aby zacząć!</p>
+            </div>
+        `;
         return;
     }
 
