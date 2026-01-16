@@ -32,7 +32,7 @@ export const store = {
                     email: foundUser.email,
                     birthdate: foundUser.birthdate,
                     team: foundUser.team,
-                    favoriteType: foundUser.favoriteType || 'Normal',
+                    favoriteType: foundUser.favoriteType || null,
                     coins: foundUser.stats?.coins || 100,
                     cards: foundUser.stats?.cards || [],
                     favorites: foundUser.favorites || [],
