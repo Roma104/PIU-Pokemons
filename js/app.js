@@ -25,10 +25,8 @@ closeBonusBtn.addEventListener('click', () => {
 if (!currentUser) {
     window.location.href = 'index.html';
 } else {
-    // 1. Logowanie użytkownika w store
     store.login(currentUser);
 
-    // 2. Obsługa motywu drużyny (Team Theme)
     const applyTeamTheme = (state) => {
         if (state.user && state.user.team) {
             document.body.classList.remove(
@@ -43,12 +41,9 @@ if (!currentUser) {
     // Wywołanie natychmiastowe (aby kolory były od razu)
     applyTeamTheme(store.state);
 
-    // Subskrypcja na przyszłe zmiany
     store.subscribe(applyTeamTheme);
 
-    // 3. Główna funkcja inicjalizująca aplikację
     const initApp = () => {
-        // Efekt Fade-In
         setTimeout(() => {
             document.body.classList.add('loaded');
         }, 10);
@@ -57,7 +52,6 @@ if (!currentUser) {
         try {
             const welcomeSound = new Audio('./assets/sounds/intro-music.mp3');
             welcomeSound.volume = 0.3;
-            // Przeglądarki często blokują autoplay, więc łapiemy błąd cicho
             welcomeSound.play().catch(() => {});
         } catch (e) {}
 
@@ -65,7 +59,6 @@ if (!currentUser) {
         const bonusInfo = store.checkDailyBonus();
         const bdayInfo = store.checkBirthdayBonus();
 
-        // Tworzymy kolejkę bonusów
         const pendingBonuses = [];
 
         if (bdayInfo.awarded) {
@@ -84,26 +77,50 @@ if (!currentUser) {
             });
         }
 
-        // Funkcja do pokazywania bonusów jeden po drugim
         function processBonuses() {
-            if (pendingBonuses.length === 0) return;
+            if (pendingBonuses.length > 0) {
+                const current = pendingBonuses.shift();
+                showBonusModal(current.title, current.message, current.icon);
+            } else {
+                if (
+                    !store.state.user.favoriteType ||
+                    store.state.user.favoriteType === 'Normal'
+                ) {
+                    const typeModal =
+                        document.getElementById('type-change-modal');
+                    const typeModalTitle = typeModal.querySelector('h2');
+                    const typeModalSubtitle =
+                        typeModal.querySelector('.subtitle');
 
-            const current = pendingBonuses.shift(); // Pobierz pierwszy bonus z kolejki
-            showBonusModal(current.title, current.message, current.icon);
+                    typeModalTitle.textContent = 'Witaj w PokéCards!';
+                    typeModalSubtitle.textContent =
+                        'Wybierz swój pierwszy ulubiony typ (Bonus +10%) za darmo!';
+
+                    const typeBtns = typeModal.querySelectorAll('.type-item');
+                    typeBtns.forEach((btn) => {
+                        const originalClick = btn.onclick;
+                        btn.onclick = () => {
+                            store.setInitialFavoriteType(btn.textContent);
+                            typeModal.classList.add('hidden');
+                            typeBtns.forEach(
+                                (b) => (b.onclick = originalClick)
+                            );
+                        };
+                    });
+
+                    typeModal.classList.remove('hidden');
+                }
+            }
         }
 
-        // Nadpisujemy zdarzenie kliknięcia przycisku w modalu, żeby sprawdzał czy są kolejne bonusy
         closeBonusBtn.onclick = () => {
             bonusOverlay.classList.add('hidden');
-            // Małe opóźnienie przed kolejnym modalem dla lepszego efektu
             setTimeout(processBonuses, 300);
         };
 
-        // Uruchom proces
         processBonuses();
     };
 
-    // 4. Uruchomienie aplikacji po załadowaniu DOM
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initApp);
     } else {
